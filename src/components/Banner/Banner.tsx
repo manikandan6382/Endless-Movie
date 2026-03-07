@@ -4,6 +4,7 @@ import requests from '../../helpers/requests'
 import { getImageUrl } from '../../helpers/imageHelper'
 import { Star, Plus, Play, Clock4, CalendarDays } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 interface Movie {
     backdrop_path: string;
     poster_path: string;
@@ -24,23 +25,36 @@ const Banner = () => {
     const [movie, setMovie] = useState<Movie | null>(null);
     const [genres, setGenres] = useState<Record<number, string>>({});
     const [duration, setDuration] = useState<string>('')
+    const [mediaType, setMediaType] = useState<'movie' | 'tv'>('movie');
+
     const navigate = useNavigate();
     useEffect(() => {
         const fetchData = async () => {
-            const genreResponse = await axios.get(requests.fetchTVGenres);
-            const genresMap = genreResponse.data.genres.reduce((acc: Record<number, string>, genre: { id: number, name: string }) => {
+
+            const [movieGenresRes, tvGenresRes] = await Promise.all([
+                axios.get(requests.fetchMovieGenres),
+                axios.get(requests.fetchTVGenres),
+            ])
+
+            const genresMap = [
+                ...movieGenresRes.data.genres,
+                ...tvGenresRes.data.genres
+            ].reduce((acc: Record<number, string>, genre: { id: number, name: string }) => {
                 acc[genre.id] = genre.name;
                 return acc
             }, {})
+
             setGenres(genresMap)
 
-            const movieResponse = await axios.get(requests.fetchNetflixOriginals)
-            const randomMovie = movieResponse.data.results[
-                Math.floor(Math.random() * movieResponse.data.results.length)
+            const trendingResponse = await axios.get(requests.fetchTrending)
+            const randomMovie = trendingResponse.data.results[
+                Math.floor(Math.random() * trendingResponse.data.results.length)
             ]
 
             setMovie(randomMovie)
 
+            const type = randomMovie.media_type || (randomMovie.title ? 'movie' : 'tv');
+            setMediaType(type)
             if (randomMovie?.id) {
                 try {
                     const detailsResponse = await axios.get<MovieDetails>(
@@ -67,6 +81,7 @@ const Banner = () => {
     }
     const getGenreNames = () => {
         if (!movie) return '';
+
         return movie.genre_ids
             .map(id => genres[id])
             .filter(Boolean)
@@ -74,7 +89,7 @@ const Banner = () => {
     }
     const handleWatch = () => {
         if (movie?.id) {
-            navigate(`tv/${movie.id}`)
+            navigate(`/${mediaType}/${movie.id}`)
         }
     }
     const releaseDate = movie?.release_date || movie?.first_air_date;
@@ -92,7 +107,7 @@ const Banner = () => {
                     <div className="">
                         <img src={getImageUrl(movie.backdrop_path)} alt="title" className='bg-layer' />
                     </div>
-                    <div className="bg-cover bg-center min-h-dvh bg-backdrop-before flex justify-center flex-col"
+                    <div className="bg-cover bg-center min-h-[85dvh] bg-backdrop-before flex justify-center flex-col"
                         style={{ backgroundImage: `url(${getImageUrl(movie.backdrop_path)})` }}
                     >
                         <div className="flex flex-col gap-10 text-white font-bold max-w-2xl px-5 md:pl-20 mt-10">
@@ -111,8 +126,22 @@ const Banner = () => {
                             </div>
                             <p className='leading-8'>{truncate(movie?.overview, 150)}</p>
                             <div className="flex gap-5">
-                                <button onClick={handleWatch} className='font-bold btn-netflix-neon flex items-center gap-4 h-12 text-sm px-6 max-w-45 w-full justify-center uppercase rounded-full'><Play className='size-5 fill-white ' />watch</button>
-                                <button className='font-bold btn-black-neon flex items-center gap-4 h-12 text-sm px-6 max-w-45 w-full justify-center uppercase rounded-full'><Plus className='' />add list</button>
+                                <motion.button
+                                    onClick={handleWatch}
+                                    whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(229,9,20,0.6)" }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className='font-bold btn-netflix-neon flex items-center gap-4 h-12 text-sm px-6 max-w-45 w-full justify-center uppercase rounded-full'
+                                >
+                                    <Play className='size-5 fill-white' />watch
+                                </motion.button>
+
+                                <motion.button
+                                    whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(255,255,255,0.3)" }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className='font-bold btn-black-neon flex items-center gap-4 h-12 text-sm px-6 max-w-45 w-full justify-center uppercase rounded-full'
+                                >
+                                    <Plus />add list
+                                </motion.button>
                             </div>
                         </div>
                     </div>

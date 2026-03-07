@@ -49,6 +49,7 @@ export interface Movie {
   vote_average: number;
   release_date?: string;
   first_air_date?: string;
+  media_type?: string;
 }
 
 const MovieDetails = ({ type }: MoviesDetailsProps) => {
@@ -61,6 +62,7 @@ const MovieDetails = ({ type }: MoviesDetailsProps) => {
 
   useEffect(() => {
     const fetchData = async () => {
+       window.scrollTo({ top: 0, behavior: 'smooth' });
       const response = await axios.get(`/${type}/${id}`)
       setData(response.data)
       if (type === 'movie' && response.data.runtime) {
@@ -81,7 +83,8 @@ const MovieDetails = ({ type }: MoviesDetailsProps) => {
       setVideos(videosResponse.data.results);
 
       const similarResponse = await axios.get(`/${type}/${id}/recommendations`)
-      setSimilarMovies(similarResponse.data.results.slice(0, 20));
+      setSimilarMovies(similarResponse.data.results.slice(0, 25));
+
 
     }
     fetchData()

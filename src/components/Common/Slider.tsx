@@ -1,6 +1,6 @@
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination, Autoplay, Mousewheel } from 'swiper/modules'
-import { useState, type ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Swiper as SwiperType } from 'swiper';
 
@@ -60,10 +60,17 @@ const Slider = ({
       }
     }
 
-    return 2; 
+    return 2;
   };
-
-
+  useEffect(() => {
+    if (swiperInstance) {
+      swiperInstance.update();  // Force Swiper to recalculate
+      setTimeout(() => {
+        setIsBeginning(swiperInstance.isBeginning);
+        setIsEnd(swiperInstance.isEnd);
+      }, 0);
+    }
+  }, [children.length, swiperInstance]);
   return (
     <section className="max-w-[98%] mx-auto relative z-1 w-full overflow-x-clip">
       <div className="py-7 px-5">
