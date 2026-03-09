@@ -24,6 +24,8 @@
   --color-success-green: #46D369;
   --color-warning-yellow: #F9AB00;
   --color-error-red: #E87C03;
+
+   --breakpoint-3xl: 112rem;
 }
 
 body {
@@ -131,18 +133,19 @@ body {
   position: fixed;
   height: 120vh;
   width: 100%;
-  opacity: 15%;
+  opacity: 20%;
   object-fit: cover;
   -webkit-mask-image: linear-gradient(180deg, #d9d9d9 78.62%, rgba(115, 115, 115, 0) 100%);
   mask-image: linear-gradient(180deg, #d9d9d9 78.62%, rgba(115, 115, 115, 0) 100%);
-  inset:0;
+  inset: 0;
   pointer-events: none;
 }
+
 .line-clamp-4 {
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 @keyframes slideDown {
@@ -150,6 +153,7 @@ body {
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -160,6 +164,7 @@ body {
   from {
     transform: scale(0);
   }
+
   to {
     transform: scale(1);
   }
@@ -173,19 +178,96 @@ body {
   animation: scaleIn 0.2s ease-out;
 }
 
-.custom-scrollbar::-webkit-scrollbar {
+*::-webkit-scrollbar {
   width: 6px;
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: #1f2937;
+*::-webkit-scrollbar-track {
+  background: #121214;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #4b5563;
+*::-webkit-scrollbar-thumb {
+  background: #e4e4e4;
   border-radius: 3px;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+*::-webkit-scrollbar-thumb:hover {
   background: #6b7280;
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: ripple-animation 0.6s ease-out;
+}
+
+@keyframes ripple-animation {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+
+  100% {
+    width: 500px;
+    height: 500px;
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  --opacity:0.7;
+  --dark-value:35;
+  --light-value:65;
+  backdrop-filter: blur(20px);
+    position:relative;
+    background-color: rgba(var(--dark-value), var(--dark-value), var(--dark-value), var(--opacity));
+    -webkit-animation: loading 4000ms infinite linear;
+    animation: loading 4000ms infinite linear;
+}
+@keyframes loading{
+    0% {
+    background-color: rgba(var(--dark-value), var(--dark-value), var(--dark-value), var(--opacity));
+}
+40% {
+    background-color: rgba(var(--dark-value), var(--dark-value), var(--dark-value), var(--opacity));
+}
+70% {
+    background-color: rgba(var(--light-value), var(--light-value), var(--light-value), var(--opacity));
+}
+90% {
+    background-color: rgba(var(--dark-value), var(--dark-value), var(--dark-value), var(--opacity));
+}
+}
+.bg-skel {
+  position: relative;
+  isolation: isolate;
+  filter: drop-shadow(12px 16px 12px rgba(0, 0, 0, 0.6));
+  filter: drop-shadow(24px 32px 24px rgba(0, 0, 0, 0.6));
+  overflow: hidden;
+
+  &:before {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, rgb(0 0 0 / 90%));
+    z-index: -1;
+  }
+
 }

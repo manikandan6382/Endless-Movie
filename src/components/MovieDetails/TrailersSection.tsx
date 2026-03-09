@@ -35,7 +35,7 @@ const TrailersSection = ({ videos }: TrailerSectionProps) => {
             <Swiper
                 title='Trailer & Clips'
                 showNavigation={true}
-                slidesPerView={{ mobile: 2, md: 3, lg: 4, }}
+                slidesPerView={{ mobile: 2, md: 3, lg: 4, xxl: 5 }}
             >
                 {createCards}
             </Swiper>

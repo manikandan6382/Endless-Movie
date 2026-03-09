@@ -106,11 +106,11 @@ const Slider = ({
           pagination={showPagination ? { clickable: true } : false}
           autoplay={autoplay ? { delay: 3000, disableOnInteraction: false } : false}
           breakpoints={{
-            640: { slidesPerView: getSlides('md') },
+            768: { slidesPerView: getSlides('md') },
             1024: { slidesPerView: getSlides('lg') },
-            1200: { slidesPerView: getSlides('xl') },
-            1400: { slidesPerView: getSlides('xxl') },
-            1600: { slidesPerView: getSlides('xxxl') },
+            1280: { slidesPerView: getSlides('xl') },
+            1536: { slidesPerView: getSlides('xxl') },
+            1792: { slidesPerView: getSlides('xxxl') },
           }}
         >
           {children.map((child, index) => (

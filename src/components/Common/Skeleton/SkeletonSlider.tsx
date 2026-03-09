@@ -1,0 +1,23 @@
+import SkeletonCard from './SkeletonCard';
+
+interface SkeletonSliderProps {
+    count?: number;
+    isTitle?:boolean;
+     isTrailer?: boolean;
+    isCast?: boolean;
+}
+
+const SkeletonSlider = ({ count = 7, isTitle = true , isTrailer, isCast,}: SkeletonSliderProps) => {
+    return (
+        <div className="max-w-[98%] mx-auto pt-12 pb-9 px-5 w-full">
+            {isTitle && <div className="animate-pulse h-7.5 rounded-lg w-full max-w-50 mb-8"></div>}
+            <div className="flex w-full overflow-x-clip">
+                {Array(count).fill(0).map((_, index) => (
+                        <SkeletonCard key={index} index={index} isTrailer={isTrailer} isCast={isCast}/>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+export default SkeletonSlider;

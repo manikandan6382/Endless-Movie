@@ -1,5 +1,5 @@
-import type { Movie } from '../../Pages/MovieDetails/MovieDetails'
 import Cards from '../Common/Cards';
+import type { Movie } from '../../types/movie';
 interface SimilarMoviesProps {
     movies: Movie[];
     type: 'movie' | 'tv';

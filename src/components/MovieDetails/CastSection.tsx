@@ -1,7 +1,7 @@
 import type { Cast } from '../../Pages/MovieDetails/MovieDetails'
 import { getImageUrl } from '../../helpers/imageHelper'
-import { ImageOffIcon } from 'lucide-react'
 import Slider from '../Common/Slider'
+import BrokenImage from '../Common/BrokenImage'
 interface castSectionProps {
     cast: Cast[]
 }
@@ -15,10 +15,7 @@ const CastSection = ({ cast }: castSectionProps) => {
                     className='w-full lg:min-w-38 aspect-2/3 rounded-lg mb-2 shadow-xl'
                 />
             ) : (
-                <div className="w-full lg:min-w-38 aspect-2/3 rounded-lg mb-2 items-center justify-center shadow-xl backdrop-blur-[60px]  bg-black/30 flex gap-2">
-                    <ImageOffIcon className='size-5' />
-                    No Image
-                </div>
+                <BrokenImage/>
             )}
             <div className="font-semibold">
                 <p className='text-sm'>{actor.name}</p>

@@ -1,6 +1,6 @@
 import { getImageUrl } from '../../helpers/imageHelper';
 import { Star, Plus, Play, Languages, CalendarDays, Clock4 } from 'lucide-react'
-import type { MovieData } from '../../Pages/MovieDetails/MovieDetails';
+import type { MovieData } from '../../types/movieDetails';
 interface MovieHeroProps {
     data: MovieData | null;
     duration: string;
@@ -25,8 +25,8 @@ const MovieHero = ({ data, duration }: MovieHeroProps) => {
                     <div className="">
                         <img src={getImageUrl(data.backdrop_path)} alt="title" className='bg-layer' />
                     </div>
-                    <div className="bg-movie-details min-h-[85dvh] 2xl:min-h-[85dvh]">
-                        <div className="bg-cover bg-backdrop-before bg-center flex justify-center flex-col min-h-[85dvh] 2xl:min-h-[85dvh]"
+                    <div className="bg-movie-details min-h-[85dvh]">
+                        <div className="bg-cover bg-backdrop-before bg-center flex justify-center flex-col min-h-[85dvh]"
                             style={{ backgroundImage: `url(${getImageUrl(data.backdrop_path)})` }}
                         >
                             <div className="flex gap-5 lg:gap-20 max-w-6xl mx-auto items-center mt-10 lg:ps-10 px-5">
