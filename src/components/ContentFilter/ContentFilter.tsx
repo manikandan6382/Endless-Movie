@@ -5,6 +5,7 @@ import { getCurrentMonthStart } from '../../helpers/requests';
 import Cards from '../Common/Cards';
 import { TrendingUp, Flame, Star, Plus } from 'lucide-react';
 import SkeletonSlider from '../Common/Skeleton/SkeletonSlider';
+import { getItem, setItem } from '../../helpers/storage';
 interface ContentFilterProps {
     contentType: 'all' | 'movie' | 'tv';
 }
@@ -13,14 +14,14 @@ interface ContentFilterProps {
 type TabType = 'trending' | 'popular' | 'premieres' | 'recent';
 const ContentFilters = ({ contentType }: ContentFilterProps) => {
     const [activeTab, setActiveTab] = useState<TabType>(() => {
-        const saved = localStorage.getItem(`activeTab_${contentType}`)
-        return saved ? JSON.parse(saved) : 'trending'
+        return getItem(`activeTab_${contentType}`, 'trending');
     });
     const [content, setContent] = useState<Movie[]>([]);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        localStorage.setItem(`activeTab_${contentType}`, JSON.stringify(activeTab))
+        setItem(`activeTab_${contentType}`, activeTab);
         const endPoints: Record<TabType, string> = {
             trending: contentType === 'all' ? '/trending/all/week' : `/trending/${contentType}/week`,
             popular: contentType === 'all' ? '/trending/all/day' : `/${contentType}/popular`,
@@ -31,13 +32,19 @@ const ContentFilters = ({ contentType }: ContentFilterProps) => {
         }
         const fetchContent = async () => {
             setLoading(true);
-            const response = await axios.get(endPoints[activeTab]);
-            const moviesWithPoster = response.data.results.filter(
-                (movie: Movie) => movie.poster_path
-            );
-            setContent(moviesWithPoster.slice(0, 25));
-
-            setLoading(false)
+            setError(null);
+            try {
+                const response = await axios.get(endPoints[activeTab]);
+                const moviesWithPoster = response.data.results.filter(
+                    (movie: Movie) => movie.poster_path
+                );
+                setContent(moviesWithPoster.slice(0, 25));
+            } catch (error) {
+                console.error('Failed to fetch content:', error);
+                setError('Failed to load content. Please try again.');
+            } finally {
+                setLoading(false);
+            }
         }
         fetchContent()
     }, [activeTab, contentType])
@@ -66,6 +73,12 @@ const ContentFilters = ({ contentType }: ContentFilterProps) => {
                     </button>
                 ))}
             </div>
+
+            {error && (
+                <div className="bg-red-600/20 border border-red-600 text-white rounded-lg p-4 mx-auto max-w-2xl my-8">
+                    <p className="font-medium">{error}</p>
+                </div>
+            )}
 
             {
                 loading ? (

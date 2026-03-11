@@ -3,12 +3,12 @@ import axios from '../helpers/axios';
 import { MOVIE_GENRES, TV_GENRES } from '../constants/genreData';
 import type { Movie } from '../types/movie';
 import type { SortType, OrderType, ContentType } from '../types/genreFilter';
+import { getItem, setItem } from '../helpers/storage';
 
 export const useGenreFilter = (contentType: ContentType) => {
     const [orderBy, setOrderBy] = useState<OrderType>('asc');
     const [selectedGenres, setSelectGenres] = useState<number[]>(() => {
-        const saved = localStorage.getItem(`selectedGenres_${contentType}`)
-        return saved ? JSON.parse(saved) : []
+        return getItem(`selectedGenres_${contentType}`, []);
     });
     const [selectedYear, setSelectedYear] = useState<string>('all');
     const [sortBy, setSortBy] = useState<SortType>('latest');
@@ -33,7 +33,7 @@ export const useGenreFilter = (contentType: ContentType) => {
 
     useEffect(() => {
         if (selectedGenres.length === 0) return;
-        localStorage.setItem(`selectedGenres_${contentType}`, JSON.stringify(selectedGenres))
+        setItem(`selectedGenres_${contentType}`, selectedGenres);
         const buildApiUrl = (endpoint: string) => {
             const currentYear = new Date().getFullYear();
             let url = endpoint;

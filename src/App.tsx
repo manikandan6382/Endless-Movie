@@ -11,8 +11,7 @@ function App() {
   // const user = null
   const user = {
     user: 'jack',
-    email: 'jack@example.com',
-    password: '123'
+    email: 'jack@example.com'
   }
   return (
       <ErrorBoundary>

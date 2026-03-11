@@ -37,7 +37,7 @@ const SearchBar = ({ bgScroll }: SearchBarProp) => {
             }
         }
         document.addEventListener('mousedown', handleClickOutside);
-        return () => removeEventListener('mousedown', handleClickOutside)
+        return () => document.removeEventListener('mousedown', handleClickOutside)
     }, [])
 
     return (
