@@ -5,9 +5,9 @@ import GenreFilter from '../../components/GenreFilter/GenreFilter';
 const HomeScreen = ()=>{
 
     return(
-        <div className={`min-h-screen bg-netflix-dark-gray bg-skel flex flex-col text-white`}>
+        <div className={`min-h-screen bg-netflix-dark-gray flex flex-col text-white`}>
             <Nav />
-            <Banner/>
+            <Banner contentType="all" />
             <ContentFilters contentType="all" />
             <GenreFilter contentType="all" />
         </div>

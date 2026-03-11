@@ -18,7 +18,7 @@ const LazyImage = ({ src, alt, className = '' }: LazyImageProps) => {
     }
 
     return (
-        <div className="relative">
+        <div className="relative rounded-lg overflow-hidden">
             {/* Skeleton while loading */}
             {!isLoaded && (
                 <div className={`absolute! inset-0 animate-pulse`}></div>

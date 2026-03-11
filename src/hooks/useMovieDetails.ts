@@ -3,13 +3,16 @@ import axios from '../helpers/axios';
 import type { MovieData, Cast, Videos } from '../types/movieDetails';
 import type { Movie } from '../types/movie';
 
+
 export const useMovieDetails = (type: 'movie' | 'tv', id: string | undefined) => {
   const [banner, setBanner] = useState<MovieData | null>(null);
   const [duration, setDuration] = useState<string>('');
   const [cast, setCast] = useState<Cast[]>([]);
   const [videos, setVideos] = useState<Videos[]>([]);
   const [similarMovies, setSimilarMovies] = useState<Movie[]>([]);
-  
+  const [error, setError] = useState<string | null>(null);
+
+
   const [loading, setLoading] = useState({
     banner: true,
     cast: true,
@@ -19,11 +22,11 @@ export const useMovieDetails = (type: 'movie' | 'tv', id: string | undefined) =>
 
   useEffect(() => {
     if (!id) return;
-
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Fetch banner (critical - blocks page)
+    // Fetch banner 
     const fetchBanner = async () => {
+      setError(null);
       try {
         const res = await axios.get(`/${type}/${id}`);
         setBanner(res.data);
@@ -41,12 +44,13 @@ export const useMovieDetails = (type: 'movie' | 'tv', id: string | undefined) =>
         }
       } catch (error) {
         console.error('Failed to fetch banner:', error);
+        setError('Failed to search movies. Please try again.');
       } finally {
-        setLoading(prev => ({ ...prev, banner: true }));
+        setLoading(prev => ({ ...prev, banner: false }));
       }
     };
 
-    // Fetch cast (optional)
+    // Fetch cast 
     const fetchCast = async () => {
       try {
         const res = await axios.get(`/${type}/${id}/credits`);
@@ -54,11 +58,11 @@ export const useMovieDetails = (type: 'movie' | 'tv', id: string | undefined) =>
       } catch (error) {
         console.error('Failed to fetch cast:', error);
       } finally {
-        setLoading(prev => ({ ...prev, cast: true }));
+        setLoading(prev => ({ ...prev, cast: false }));
       }
     };
 
-    // Fetch videos (optional)
+    // Fetch videos 
     const fetchVideos = async () => {
       try {
         const res = await axios.get(`/${type}/${id}/videos`);
@@ -66,11 +70,11 @@ export const useMovieDetails = (type: 'movie' | 'tv', id: string | undefined) =>
       } catch (error) {
         console.error('Failed to fetch videos:', error);
       } finally {
-        setLoading(prev => ({ ...prev, videos: true }));
+        setLoading(prev => ({ ...prev, videos: false }));
       }
     };
 
-    // Fetch similar (optional)
+    // Fetch similar 
     const fetchSimilar = async () => {
       try {
         const res = await axios.get(`/${type}/${id}/recommendations`);
@@ -78,7 +82,7 @@ export const useMovieDetails = (type: 'movie' | 'tv', id: string | undefined) =>
       } catch (error) {
         console.error('Failed to fetch similar:', error);
       } finally {
-        setLoading(prev => ({ ...prev, similar: true }));
+        setLoading(prev => ({ ...prev, similar: false }));
       }
     };
 
@@ -95,6 +99,7 @@ export const useMovieDetails = (type: 'movie' | 'tv', id: string | undefined) =>
     cast,
     videos,
     similarMovies,
-    loading
+    loading,
+    error
   };
 };

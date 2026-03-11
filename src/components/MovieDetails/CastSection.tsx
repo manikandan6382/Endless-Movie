@@ -1,7 +1,8 @@
-import type { Cast } from '../../Pages/MovieDetails/MovieDetails'
-import { getImageUrl } from '../../helpers/imageHelper'
+import type { Cast } from '../../types/movieDetails'
 import Slider from '../Common/Slider'
 import BrokenImage from '../Common/BrokenImage'
+import LazyImage from '../Common/LazyImage'
+import { getImageUrl } from '../../helpers/imageHelper'
 interface castSectionProps {
     cast: Cast[]
 }
@@ -10,12 +11,14 @@ const CastSection = ({ cast }: castSectionProps) => {
     const createCards = cast.map(actor => (
         <div className="flex gap-4 flex-col text-center shrink-0" key={actor.id}>
             {actor.profile_path ? (
-                <img src={getImageUrl(actor.profile_path, 'w185')}
-                    alt={actor.name}
-                    className='w-full lg:min-w-38 aspect-2/3 rounded-lg mb-2 shadow-xl'
+
+                <LazyImage
+                    src={getImageUrl(actor.profile_path, 'w185')}
+                    alt={actor.title || actor.name || 'Movie poster'}
+                    className="w-full aspect-2/3 object-cover group-hover:scale-110 transition duration-300 rounded-lg"
                 />
             ) : (
-                <BrokenImage/>
+                <BrokenImage />
             )}
             <div className="font-semibold">
                 <p className='text-sm'>{actor.name}</p>

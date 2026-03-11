@@ -1,4 +1,5 @@
-const BannerSkeleton = () => {
+
+const BannerSkeleton = ({isPoster = true} : {isPoster?: boolean}) => {
     return (
             <div className="">
                     <div className="bg-movie-details min-h-[85dvh]">
@@ -7,8 +8,8 @@ const BannerSkeleton = () => {
 
                                 <div className="flex gap-5 lg:gap-20 max-w-6xl mx-auto items-center mt-10 lg:ps-10 px-5">
 
-                                    <div className="bg-skel animate-pulse h-100 rounded-lg shadow-xl w-full max-w-75">
-                                    </div>
+                                   { isPoster && <div className="bg-skel animate-pulse h-100 rounded-lg shadow-xl w-full max-w-75">
+                                    </div>}
                                     <div className="w-full flex gap-8 flex-col max-w-2xl">
                                         <div className="flex gap-3">
                                             <div className="animate-pulse h-6 rounded-lg w-full max-w-25"></div>

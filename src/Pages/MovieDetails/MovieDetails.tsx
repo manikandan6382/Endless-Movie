@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
 import Nav from '../../components/Nav/Nav';
 import MovieHero from '../../components/MovieDetails/MovieHero';
 import CastSection from '../../components/MovieDetails/CastSection';
@@ -7,20 +7,44 @@ import SimilarMovies from '../../components/MovieDetails/SimilarMovies';
 import SkeletonSlider from '../../components/Common/Skeleton/SkeletonSlider';
 import BannerSkeleton from '../../components/Common/Skeleton/BannerSkeleton';
 import { useMovieDetails } from '../../hooks/useMovieDetails';
+import { useState} from 'react';
 
-interface MoviesDetailsProps {
-  type: 'movie' | 'tv';
-}
+const MovieDetails = () => {
+  const { id, type } = useParams<{ id: string; type: string }>();
+  const [showTrailer, setShowTrailer] = useState(false);
 
-const MovieDetails = ({ type }: MoviesDetailsProps) => {
-  const { id } = useParams();
-  const { banner, duration, cast, videos, similarMovies, loading } = useMovieDetails(type, id);
+  // Call hook first (before any conditions)
+  const validType = (type === 'movie' || type === 'tv') ? type as 'movie' | 'tv' : 'movie';
+  const { banner, duration, cast, videos, similarMovies, loading, error } = useMovieDetails(validType, id);
 
+  // Validate type after hooks
+  if (type !== 'movie' && type !== 'tv') {
+    return <Navigate to="/" replace />;
+  }
 
   return (
-    <section className="min-h-screen bg-netflix-dark-gray bg-skel flex flex-col text-white">
+    <section className="min-h-screen bg-netflix-dark-gray flex flex-col text-white">
       <Nav />
-    { loading.banner ? <BannerSkeleton /> : <MovieHero data={banner} duration={duration} /> }
+      {error && (
+        <div className="bg-red-600/20 border border-red-600 text-white rounded-lg p-4 mx-auto max-w-2xl my-8">
+          <p className="font-medium">{error}</p>
+        </div>
+      )}
+      {loading.banner ? <BannerSkeleton /> : (
+        <MovieHero
+          data={banner}
+          duration={duration}
+          trailerKey={
+            videos.find(v => v.type === 'Trailer')?.key ||
+            videos.find(v => v.type === 'Teaser')?.key ||
+            videos[0]?.key ||
+            null
+          }
+          showTrailer={showTrailer}
+          onPlayTrailer={() => setShowTrailer(true)}
+          onCloseTrailer={() => setShowTrailer(false)}
+        />
+      )}
 
       {loading.cast ? (
         <SkeletonSlider count={7} isCast />

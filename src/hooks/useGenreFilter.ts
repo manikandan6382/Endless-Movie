@@ -6,11 +6,15 @@ import type { SortType, OrderType, ContentType } from '../types/genreFilter';
 
 export const useGenreFilter = (contentType: ContentType) => {
     const [orderBy, setOrderBy] = useState<OrderType>('asc');
-    const [selectedGenres, setSelectGenres] = useState<number[]>([]);
+    const [selectedGenres, setSelectGenres] = useState<number[]>(() => {
+        const saved = localStorage.getItem(`selectedGenres_${contentType}`)
+        return saved ? JSON.parse(saved) : []
+    });
     const [selectedYear, setSelectedYear] = useState<string>('all');
     const [sortBy, setSortBy] = useState<SortType>('latest');
     const [genreData, setGenreData] = useState<Record<number, Movie[]>>({});
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const genres = useMemo(() => {
         return contentType === 'all' || contentType === 'movie'
@@ -29,6 +33,7 @@ export const useGenreFilter = (contentType: ContentType) => {
 
     useEffect(() => {
         if (selectedGenres.length === 0) return;
+        localStorage.setItem(`selectedGenres_${contentType}`, JSON.stringify(selectedGenres))
         const buildApiUrl = (endpoint: string) => {
             const currentYear = new Date().getFullYear();
             let url = endpoint;
@@ -53,6 +58,7 @@ export const useGenreFilter = (contentType: ContentType) => {
         };
 
         const fetchGenreData = async () => {
+            setError(null);
             setLoading(true);
 
             const newData: Record<number, Movie[]> = {};
@@ -63,9 +69,14 @@ export const useGenreFilter = (contentType: ContentType) => {
                 try {
                     const url = buildApiUrl(genre.endpoint);
                     const response = await axios.get(url);
-                    newData[genreId] = response.data.results.slice(0, 20);
+                    const moviesWithPoster = response.data.results.filter(
+                        (movie: Movie) => movie.poster_path 
+                    );
+                    newData[genreId] = moviesWithPoster.slice(0, 20);
                 } catch (error) {
                     console.error(`Failed to fetch ${genre.name}:`, error);
+                    setError('Failed to search movies. Please try again.');
+
                 }
             }
             setGenreData(newData);
@@ -98,5 +109,6 @@ export const useGenreFilter = (contentType: ContentType) => {
         genreData,
         loading,
         sortMovies,
+        error,
     };
 };

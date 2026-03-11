@@ -12,11 +12,15 @@ interface ContentFilterProps {
 
 type TabType = 'trending' | 'popular' | 'premieres' | 'recent';
 const ContentFilters = ({ contentType }: ContentFilterProps) => {
-    const [activeTab, setActiveTab] = useState<TabType>('trending');
+    const [activeTab, setActiveTab] = useState<TabType>(() => {
+        const saved = localStorage.getItem(`activeTab_${contentType}`)
+        return saved ? JSON.parse(saved) : 'trending'
+    });
     const [content, setContent] = useState<Movie[]>([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        localStorage.setItem(`activeTab_${contentType}`, JSON.stringify(activeTab))
         const endPoints: Record<TabType, string> = {
             trending: contentType === 'all' ? '/trending/all/week' : `/trending/${contentType}/week`,
             popular: contentType === 'all' ? '/trending/all/day' : `/${contentType}/popular`,
@@ -28,9 +32,12 @@ const ContentFilters = ({ contentType }: ContentFilterProps) => {
         const fetchContent = async () => {
             setLoading(true);
             const response = await axios.get(endPoints[activeTab]);
-            setContent(response.data.results.slice(0, 25));
+            const moviesWithPoster = response.data.results.filter(
+                (movie: Movie) => movie.poster_path
+            );
+            setContent(moviesWithPoster.slice(0, 25));
 
-                setLoading(false)
+            setLoading(false)
         }
         fetchContent()
     }, [activeTab, contentType])
@@ -62,7 +69,7 @@ const ContentFilters = ({ contentType }: ContentFilterProps) => {
 
             {
                 loading ? (
-                   <SkeletonSlider count={7}  isTitle={false}/>
+                    <SkeletonSlider count={7} isTitle={false} />
                 ) : (
                     <div className="">
                         <Cards

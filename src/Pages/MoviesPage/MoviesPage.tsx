@@ -1,12 +1,17 @@
+import Nav from '../../components/Nav/Nav'
+import Banner from '../../components/Banner/Banner'
+import ContentFilters from '../../components/ContentFilter/ContentFilter'
 import GenreFilter from '../../components/GenreFilter/GenreFilter';
+const MoviesPage = ()=>{
 
-const MoviesPage = () => {
-    return (
-        <div className="min-h-screen bg-netflix-black pt-20 px-8">
-            <h1 className="text-white text-3xl font-bold mb-6">Movies</h1>
+    return(
+        <div className={`min-h-screen bg-netflix-dark-gray flex flex-col text-white`}>
+            <Nav />
+            <Banner contentType="movie" />
+            <ContentFilters contentType="movie" />
             <GenreFilter contentType="movie" />
         </div>
-    );
-};
+    )
+}
 
-export default MoviesPage;
+export default MoviesPage; 

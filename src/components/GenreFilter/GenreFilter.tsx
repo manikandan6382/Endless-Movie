@@ -25,6 +25,7 @@ const GenreFilter = ({ contentType }: GenreFilterProps) => {
         genreData,
         loading,
         sortMovies,
+        error,
     } = useGenreFilter(contentType);
 
     const yearOptions = getYearOptions();
@@ -50,7 +51,7 @@ const GenreFilter = ({ contentType }: GenreFilterProps) => {
         <div className="flex flex-col gap-3">
             <Slider
                 showNavigation={true}
-                slidesPerView={{ mobile: 3, md: 4, lg: 5, xl: 6, xxl: 7 ,xxxl:8}}
+                slidesPerView={{ mobile: 3, md: 4, lg: 5, xl: 6, xxl: 7, xxxl: 8 }}
                 arrowClassName='h-15! flex items-center justify-center top-2/5! mx-0!'
                 spaceBetween={0}
             >
@@ -79,6 +80,12 @@ const GenreFilter = ({ contentType }: GenreFilterProps) => {
                 </div>
             )}
 
+            {error && (
+                <div className="bg-red-600/20 border border-red-600 text-white rounded-lg p-4 mx-auto max-w-2xl my-8">
+                    <p className="font-medium">{error}</p>
+                </div>
+            )}
+
             {loading ? (
 
                 <SkeletonSlider count={7} />
@@ -88,8 +95,15 @@ const GenreFilter = ({ contentType }: GenreFilterProps) => {
                     const genre = genres.find(g => g.id === genreId);
                     const movies = genreData[genreId] || [];
                     const sortedMovies = sortMovies(movies);
-                    if (!genre || movies.length === 0) return null;
+                    if (!genre) return null;
 
+                    if (movies.length === 0) {
+                        return (
+                            <div key={genreId} className="text-white text-center p-10">
+                                <p className="text-lg">No results found for {genre.name}</p>
+                            </div>
+                        );
+                    }
                     return (
                         <Cards
                             key={genreId}

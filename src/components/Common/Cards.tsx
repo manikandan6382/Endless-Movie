@@ -42,7 +42,7 @@ const Cards = ({ movies, type, title, breakPoints, arrowClassName }: cardSection
                     <div className="drop-shadow-2xl">
                         <div className="overflow-hidden rounded-lg">
                             <LazyImage
-                                src={getImageUrl(movie.poster_path, 'w342')}
+                                src={getImageUrl(movie.poster_path || '', 'w342')}
                                 alt={movie.title || movie.name || 'Movie poster'}
                                 className="w-full aspect-2/3 object-cover group-hover:scale-110 transition duration-300 "
                             />
@@ -52,10 +52,14 @@ const Cards = ({ movies, type, title, breakPoints, arrowClassName }: cardSection
                         <p className="text-white font-medium truncate">{movie.title || movie.name}</p>
                         <div className="flex items-center justify-between gap-3">
                             <p className='text-gray-400 text-sm font-semibold'>{formattedDate}</p>
-                            <div className=" flex items-center gap-1">
-                                <Star className="size-4 fill-yellow-400 text-yellow-400" />
-                                <span className="text-white text-sm">{movie.vote_average.toFixed(1)}</span>
-                            </div>
+                            {movie.vote_average > 0 ? (
+                                <div className="flex items-center gap-1">
+                                    <Star className="size-4 fill-yellow-400 text-yellow-400" />
+                                    <span className="text-white text-sm">{movie.vote_average.toFixed(1)}</span>
+                                </div>
+                            ) : (
+                                <span className="rounded-full tracking-wider bg-black/80 backdrop-blur-md text-white text-[10px] px-4 py-2 flex items-center leading-1 font-bold">NEW</span>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -66,9 +70,6 @@ const Cards = ({ movies, type, title, breakPoints, arrowClassName }: cardSection
         <>
             <Slider
                 title={title}
-                lazy={true}
-                preloadImages={false}
-                watchSlidesProgress={true}
                 showNavigation={true}
                 slidesPerView={breakPoints}
                 arrowClassName={arrowClassName}
