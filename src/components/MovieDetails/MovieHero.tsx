@@ -1,7 +1,7 @@
 import { getImageUrl } from '../../helpers/imageHelper';
 import { Star, Plus, Play, Languages, CalendarDays, Clock4 } from 'lucide-react'
 import type { MovieData } from '../../types/movieDetails';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import LazyImage from '../Common/LazyImage';
 
 interface MovieHeroProps {
@@ -16,13 +16,6 @@ interface MovieHeroProps {
 
 const MovieHero = ({ data, duration, trailerKey, showTrailer, onPlayTrailer, onCloseTrailer }: MovieHeroProps) => {
     const [bgLoaded, setBgLoaded] = useState(false);
-    useEffect(() => {
-        if (data?.backdrop_path) {
-            const img = new Image();
-            img.src = getImageUrl(data.backdrop_path);
-            img.onload = () => setBgLoaded(true);
-        }
-    }, [data?.backdrop_path]);
 
     const title = data?.title || data?.name;
     const releaseDate = data?.release_date || data?.first_air_date;
@@ -47,8 +40,16 @@ const MovieHero = ({ data, duration, trailerKey, showTrailer, onPlayTrailer, onC
                     </button>
                     <div className="">
                         <img src={getImageUrl(data.backdrop_path)} alt="title" className='bg-layer' />
+                        {/* hidden lazy img to trigger bgLoaded */}
+                        <img
+                            src={getImageUrl(data.backdrop_path)}
+                            alt=""
+                            loading="lazy"
+                            className="hidden"
+                            onLoad={() => setBgLoaded(true)}
+                        />
                     </div>
-                    <div className="bg-movie-details min-h-[85dvh]">
+                    <div className="bg-movie-details bg-movie-details-sm min-h-[85dvh]">
                         {showTrailer && trailerKey ? (
                             // Show YouTube trailer
                             <div className="relative min-h-[85dvh] bg-black flex items-center justify-center pb-5">
@@ -67,7 +68,7 @@ const MovieHero = ({ data, duration, trailerKey, showTrailer, onPlayTrailer, onC
                                 style={{ backgroundImage: bgLoaded ? `url(${getImageUrl(data.backdrop_path)})` : 'none' }}
                             >
 
-                                <div className="flex gap-5 lg:gap-20 max-w-6xl mx-auto items-center mt-10 lg:ps-10 px-5">
+                                <div className="flex gap-5 lg:gap-20 max-w-6xl mx-auto items-center mt-10 lg:ps-10 px-5 flex-wrap lg:flex-nowrap justify-center">
                                     <div className="shrink-0">
                                         <LazyImage
                                             src={getImageUrl(data.poster_path, 'w342')}
@@ -83,15 +84,15 @@ const MovieHero = ({ data, duration, trailerKey, showTrailer, onPlayTrailer, onC
                                                     <p className='opacity-90 pt-1'><span>{genres}</span> </p>
                                                 )}
                                             </div>
-                                            <h1 className='text-5xl tracking-widest leading-18'>{title}</h1>
+                                            <h1 className='md:text-5xl text-4xl tracking-widest leading-12 md:leading-18 w-[95%]'>{title}</h1>
                                             <p className='leading-8 font-medium text-lg line-clamp-5'>{data?.overview}</p>
                                         </div>
-                                        <div className="flex gap-5 lg:gap-10">
+                                        <div className="flex-wrap lg:flex-nowrap flex gap-5 lg:gap-10">
                                             {duration && <div className='flex gap-2 '><Clock4 className='size-5' /> {duration}</div>}
                                             {formattedDate && <div className="flex items-center gap-2"><CalendarDays className='size-5' /> {formattedDate}</div>}
                                             <div className="uppercase flex gap-2">
                                                 <Languages className='size-5' />
-                                                <div className="flex gap-3 items-center">
+                                                <div className="flex-wrap lg:flex-nowrap flex gap-3 items-center">
                                                     <span className=''>{data.spoken_languages[0]?.name}</span>
                                                     <span className=''>{data.spoken_languages[1]?.name}</span>
                                                     <span className=''>{data.spoken_languages[2]?.name}</span>
@@ -106,7 +107,7 @@ const MovieHero = ({ data, duration, trailerKey, showTrailer, onPlayTrailer, onC
                                             >
                                                 <Play className='size-5 fill-white' />watch
                                             </button>
-                                            <button className='font-bold btn-black-neon flex items-center gap-4 h-12 text-sm px-6 max-w-45 w-full justify-center uppercase rounded-full'><Plus className='' />add list</button>
+                                            <button className='text-nowrap font-bold btn-black-neon flex items-center gap-4 h-12 text-sm px-6 max-w-45 w-full justify-center uppercase rounded-full'><Plus className='' />add list</button>
                                         </div>
                                     </div>
                                 </div>

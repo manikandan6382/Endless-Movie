@@ -1,5 +1,7 @@
 {
   "rewrites": [
+    { "source": "/api/tmdb/:path*", "destination": "/api/tmdb/[...path]" },
+    { "source": "/api/image/:path*", "destination": "/api/image/[...path]" },
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]

@@ -73,7 +73,7 @@ const Slider = ({
   }, [children.length, swiperInstance]);
   return (
     <section className="max-w-[98%] mx-auto relative z-1 w-full overflow-x-clip">
-      <div className="md:py-7 md:px-5 py-2 px-1">
+      <div className="md:py-7 md:px-5 py-2 px-2">
         {title && <h2 className="text-white text-[25px] font-bold md:mb-6 mb-3">{title}</h2>}
         {/* Custom Previous Arrow */}
         {showNavigation && (

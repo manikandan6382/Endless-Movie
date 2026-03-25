@@ -34,7 +34,11 @@ export const useAuth = () => {
 
   const loginWithGithub = () => signInWithPopup(auth, githubProvider);
 
-  return { currentUser, loading, signup, login, logout, resetPassword, loginWithGoogle, loginWithGithub };
+  const updateUserProfile = async (photoURL: string) => {
+    if (auth.currentUser) await updateProfile(auth.currentUser, { photoURL });
+  };
+
+  return { currentUser, loading, signup, login, logout, resetPassword, loginWithGoogle, loginWithGithub, updateUserProfile };
 };
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {

@@ -35,12 +35,12 @@ const GenreFilter = ({ contentType }: GenreFilterProps) => {
   const yearOptions = getYearOptions();
 
   const createCards = genres.map((genre) => (
-    <div key={genre.id} className="md:px-3 px-2 mt-5 md:mt-0">
+    <div key={genre.id} className="md:px-3 px-1 mt-5 md:mt-0">
       <Button
         onClick={() => toggleGenreId(genre.id)}
         className={`w-full md:h-10 h-9 max-w-45 text-nowrap ${
           selectedGenres.includes(genre.id)
-            ? "bg-netflix-red text-white shadow-lg scale-105"
+            ? "bg-netflix-red text-white shadow-lg"
             : "bg-black/90 text-white hover:scale-105 text-sm"
         }`}
       >
@@ -53,14 +53,14 @@ const GenreFilter = ({ contentType }: GenreFilterProps) => {
     <div className="flex flex-col gap-3 pb-4">
       <Slider
         showNavigation={true}
-        slidesPerView={{ mobile: 2, md: 4, lg: 5, xl: 6, xxl: 7, xxxl: 8 }}
+        slidesPerView={{ mobile: 2.5, md: 4, lg: 5, xl: 6, xxl: 7, xxxl: 8 }}
         arrowClassName="h-15! flex items-center justify-center top-2/5! mx-0!"
         spaceBetween={0}
       >
         {createCards}
       </Slider>
       {selectedGenres.length > 0 && (
-        <div className="flex overflow-scroll scrollbar-hidden md:gap-4 max-w-[95%] mx-auto w-full gap-3">
+        <div className="flex md:gap-4 max-w-[95%] mx-auto w-full gap-3 overflow-scroll scrollbar-hidden">
           <Dropdown
             value={orderBy}
             options={ORDER_OPTIONS}

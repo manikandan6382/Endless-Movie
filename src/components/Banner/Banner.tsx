@@ -4,12 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useBanner } from '../../hooks/useBanner';
 import BannerSkeleton from '../Common/Skeleton/BannerSkeleton';
+import { useState } from 'react';
 interface BannerProps {
     contentType?: 'all' | 'movie' | 'tv';
 }
 const Banner = ({ contentType = 'all' }: BannerProps) => {
     const { movie, duration, mediaType, getGenreNames, loading, error, currentIndex, totalMovies, setCurrentIndex } = useBanner(contentType);
     const navigate = useNavigate();
+    const [bgLoaded, setBgLoaded] = useState<number | null>(null);
 
 
     const handleWatch = () => {
@@ -56,11 +58,18 @@ const Banner = ({ contentType = 'all' }: BannerProps) => {
                         >
                             <div>
                                 <img src={getImageUrl(movie.backdrop_path ?? '')} alt="title" className='bg-layer' />
+                                <img
+                                    src={getImageUrl(window.innerWidth > 767 ? movie.backdrop_path : movie.poster_path)}
+                                    alt=""
+                                    loading="lazy"
+                                    className="hidden"
+                                    onLoad={() => setBgLoaded(currentIndex)}
+                                />
                             </div>
                             <div className="bg-movie-details md:min-h-[85dvh] min-h-[50dvh]">
                                 <div
-                                    className="bg-cover bg-backdrop-before bg-center flex justify-center flex-col md:min-h-[85dvh] min-h-[50dvh]"
-                                    style={{ backgroundImage: `url(${getImageUrl(window.innerWidth > 767 ? movie.backdrop_path : movie.poster_path)})` }}
+                                    className={`bg-cover bg-backdrop-before bg-center flex justify-center flex-col md:min-h-[85dvh] min-h-[50dvh] transition-opacity duration-500 ${bgLoaded === currentIndex ? 'opacity-100' : 'opacity-0'}`}
+                                    style={{ backgroundImage: bgLoaded === currentIndex ? `url(${getImageUrl(window.innerWidth > 767 ? movie.backdrop_path : movie.poster_path)})` : 'none' }}
                                 >
                                     <div className="flex flex-col gap-10 text-white font-bold max-w-2xl px-5 md:pl-20 mt-10">
                                         <div className="flex flex-col gap-6">
@@ -85,12 +94,12 @@ const Banner = ({ contentType = 'all' }: BannerProps) => {
                                                     <p className='opacity-90'><span>{getGenreNames()}</span></p>
                                                 )}
                                             </div>
-                                            <h1 className='text-6xl tracking-widest leading-18 hidden md:block'>
+                                            <h1 className='md:text-6xl text-4xl tracking-widest leading-12 md:leading-18 w-[95%]'>
                                                 {movie?.title || movie?.name || movie?.original_name}
                                             </h1>
                                         </div>
-                                        <p className='leading-8 line-clamp-3 hidden! md:[display:-webkit-box]!'>{movie?.overview || ''}</p>
-                                        <div className="flex gap-5 pb-6">
+                                        <p className='leading-8 line-clamp-3 '>{movie?.overview || ''}</p>
+                                        <div className="flex gap-5 md:pb-15 pb-25">
                                             <motion.button
                                                 onClick={handleWatch}
                                                 whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(229,9,20,0.6)" }}
@@ -102,7 +111,7 @@ const Banner = ({ contentType = 'all' }: BannerProps) => {
                                             <motion.button
                                                 whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(255,255,255,0.3)" }}
                                                 whileTap={{ scale: 0.95 }}
-                                                className='font-bold btn-black-neon flex items-center gap-4 h-12 text-sm px-6 max-w-45 w-full justify-center uppercase rounded-full'
+                                                className='text-nowrap font-bold btn-black-neon flex items-center gap-4 h-12 text-sm px-6 max-w-45 w-full justify-center uppercase rounded-full'
                                             >
                                                 <Plus />add list
                                             </motion.button>

@@ -1,17 +1,12 @@
 // axios.ts
 import axios from "axios";
 
+const isDev = import.meta.env.DEV;
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
-if (!API_KEY) {
-    throw new Error('TMDB API key is missing. Please add VITE_TMDB_API_KEY to your .env file');
-}
-
 const instance = axios.create({
-    baseURL: 'https://api.themoviedb.org/3',
-    params: {
-        api_key: API_KEY 
-    }
+    baseURL: isDev ? 'https://api.themoviedb.org/3' : '/api/tmdb',
+    ...(isDev && { params: { api_key: API_KEY } }),
 })
 
 export default instance

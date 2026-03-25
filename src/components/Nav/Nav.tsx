@@ -1,24 +1,32 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./Nav.css";
 import SearchBar from "./SearchBar";
-import { Home, MonitorSmartphone, Popcorn, Search, } from "lucide-react";
+import { Home, MonitorSmartphone, Popcorn, Search } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 const Nav = () => {
   const [bgScroll, setBgScroll] = useState(false);
   const [showMobileSearch, setShowMobileSearch] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const lastScrollY = useRef(0);
   const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 100) {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > 200) {
         setBgScroll(true);
       } else {
         setBgScroll(false);
       }
+      if (currentScrollY > lastScrollY.current && currentScrollY > 70) {
+        setHidden(true); // scrolling down → hide
+      } else {
+        setHidden(false); // scrolling up → show
+      }
+      lastScrollY.current = currentScrollY;
     };
     window.addEventListener("scroll", handleScroll);
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -26,25 +34,25 @@ const Nav = () => {
     return location.pathname === path;
   };
 
-  const isSearchActive = location.pathname === '/search';
+  const isSearchActive = location.pathname === "/search";
 
   return (
     <div className="">
       {/* Desktop Navigation */}
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${bgScroll ? "bg-black/90 backdrop-blur-md shadow-lg" : "bg-gradient-to-b from-black/80 to-transparent"}`}
+        className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-150 ease-linear  ${hidden ? "-translate-y-full" : "translate-y-0"} ${bgScroll ? "bg-black/90 backdrop-blur-md shadow-lg" : "bg-gradient-to-b from-black/80 to-transparent"}`}
       >
         <div className="flex lg:gap-25 md:gap-15 gap-5 text-white px-6 py-4 text-xl items-center">
-          <Link to="/" className="flex-shrink-0">
+          <Link to="/" className="shrink-0">
             <img
               src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
               alt="Netflix Logo"
               className="md:h-8 h-6"
             />
           </Link>
-          
+
           {/* Desktop Menu */}
-          <div className="gap-8 text-[16px] md:flex hidden">
+          <div className="gap-20 text-[16px] lg:flex hidden">
             <Link
               to="/"
               className={`hover:text-netflix-red transition-colors font-medium ${
@@ -70,7 +78,7 @@ const Nav = () => {
               TV Shows
             </Link>
           </div>
-          
+
           {/* Desktop Search & Profile */}
           <div className="flex items-center gap-4 md:ml-auto justify-end grow">
             <div className="hidden md:block flex-1 max-w-md">
@@ -84,15 +92,15 @@ const Nav = () => {
               />
             </Link>
           </div>
-          
+
           {/* Mobile Profile - Only show on mobile */}
           <Link to="/profile" className="md:hidden ml-auto">
             <img
               src="https://imgs.search.brave.com/9Sif716P2JZdFr0lCg1qTRpKQlUFl42lAG606LJ3eL0/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzEyLzE5Lzc3LzAz/LzM2MF9GXzEyMTk3/NzAzNzZfSlhEWEla/OFZqb1VWNUNQR3RJ/NDZMeGMyRkQ4UUc5/aDUuanBn"
               alt="Profile"
               className={`object-cover rounded-full w-10 h-10 transition-all duration-200 ${
-                isActive("/profile") 
-                  ? "ring-2 ring-netflix-red" 
+                isActive("/profile")
+                  ? "ring-2 ring-netflix-red"
                   : "hover:ring-2 hover:ring-white/30"
               }`}
             />
@@ -102,7 +110,7 @@ const Nav = () => {
 
       {/* Mobile Search Overlay */}
       {showMobileSearch && (
-        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm md:hidden">
+        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm lg:hidden">
           <div className="p-4 pt-6">
             <div className="flex items-center gap-4 mb-4">
               <button
@@ -120,7 +128,7 @@ const Nav = () => {
       )}
 
       {/* Mobile Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden">
+      <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden">
         <div className="bg-black/95 backdrop-blur-md border-t border-white/10">
           <div className="flex items-center justify-around py-2">
             <Link
@@ -132,7 +140,7 @@ const Nav = () => {
               <Home className="w-6 h-6" />
               <span className="text-xs font-medium">Home</span>
             </Link>
-            
+
             <Link
               to="/movie"
               className={`flex flex-col items-center gap-1 py-2 px-4 transition-colors ${
@@ -142,7 +150,7 @@ const Nav = () => {
               <Popcorn className="w-6 h-6" />
               <span className="text-xs font-medium">Movies</span>
             </Link>
-            
+
             <Link
               to="/tv"
               className={`flex flex-col items-center gap-1 py-2 px-4 transition-colors ${
@@ -152,7 +160,7 @@ const Nav = () => {
               <MonitorSmartphone className="w-6 h-6" />
               <span className="text-xs font-medium">TV Shows</span>
             </Link>
-            
+
             <button
               onClick={() => setShowMobileSearch(true)}
               className={`flex flex-col items-center gap-1 py-2 px-4 transition-colors ${
@@ -162,7 +170,7 @@ const Nav = () => {
               <Search className="w-6 h-6" />
               <span className="text-xs font-medium">Search</span>
             </button>
-            
+
             <Link
               to="/profile"
               className={`flex flex-col items-center gap-1 py-2 px-4 transition-colors ${
