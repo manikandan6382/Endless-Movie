@@ -7,10 +7,11 @@ import { motion } from "framer-motion";
 interface searchSuggestionProp {
     results: SearchResult[];
     onSelect: () => void;
-    query:string
+    query: string;
+    isMobile?: boolean;
 }
 
-const SearchSuggestion = ({ results, onSelect,query }: searchSuggestionProp) => {
+const SearchSuggestion = ({ results, onSelect, query }: searchSuggestionProp) => {
     const navigate = useNavigate();
     
     if (results.length === 0 && query.length > 2) {

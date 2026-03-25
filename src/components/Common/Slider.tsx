@@ -73,13 +73,13 @@ const Slider = ({
   }, [children.length, swiperInstance]);
   return (
     <section className="max-w-[98%] mx-auto relative z-1 w-full overflow-x-clip">
-      <div className="py-7 px-5">
-        {title && <h2 className="text-white text-[25px] font-bold mb-6">{title}</h2>}
+      <div className="md:py-7 md:px-5 py-2 px-1">
+        {title && <h2 className="text-white text-[25px] font-bold md:mb-6 mb-3">{title}</h2>}
         {/* Custom Previous Arrow */}
         {showNavigation && (
           <button
             onClick={handlePrev}
-            className={`ms-2 absolute left-0 px-0 top-1/2 mt-3 -translate-y-1/2 z-10 bg-black/70 text-white p-0 rounded-full hover:bg-black/90 h-30 cursor-pointer hover:scale-[1.1] duration-800 transition ${isBeginning ? 'opacity-0 cursor-not-allowed hover:scale-100 -translate-full' : ''} ${arrowClassName}`}
+            className={`ms-2 absolute left-0 px-0 top-1/2 mt-3 -translate-y-1/2 z-10 bg-black/70 text-white p-0 rounded-full hover:bg-black/90 h-30 cursor-pointer hover:scale-[1.1] duration-800 transition md:flex hidden justify-center items-center ${isBeginning ? 'opacity-0 cursor-not-allowed hover:scale-100 -translate-full' : ''} ${arrowClassName}`}
           >
             <ChevronLeft className="size-6" />
           </button>
@@ -121,7 +121,7 @@ const Slider = ({
         {showNavigation && (
           <button
             onClick={handleNext}
-            className={`me-2 absolute px-0 right-0 top-1/2 mt-3 -translate-y-1/2 z-10 bg-black/70 text-white p-0 rounded-full hover:bg-black/90 h-30 cursor-pointer hover:scale-[1.1] duration-800 transition ${isEnd ? 'opacity-0 cursor-not-allowed hover:scale-100 translate-full' : ''} ${arrowClassName}`}
+            className={`me-2 absolute px-0 right-0 top-1/2 mt-3 -translate-y-1/2 z-10 bg-black/70 text-white p-0 rounded-full hover:bg-black/90 h-30 cursor-pointer hover:scale-[1.1] duration-800 transition md:flex hidden justify-center items-center ${isEnd ? 'opacity-0 cursor-not-allowed hover:scale-100 translate-full' : ''} ${arrowClassName}`}
           >
             <ChevronRight className="size-6" />
           </button>

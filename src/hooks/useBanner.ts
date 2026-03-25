@@ -111,11 +111,11 @@ export const useBanner = (contentType: 'all' | 'movie' | 'tv' = 'all') => {
     useEffect(() => {
         if (movies.length <= 1) return;
 
-        const interval = setInterval(() => {
-            setCurrentIndex((prev) => (prev + 1) % movies.length);
-        }, 8000);
+        // const interval = setInterval(() => {
+        //     setCurrentIndex((prev) => (prev + 1) % movies.length);
+        // }, 10000);
 
-        return () => clearInterval(interval);
+        // return () => clearInterval(interval);
     }, [movies.length]);
 
     const getGenreNames = () => {

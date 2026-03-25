@@ -25,10 +25,16 @@ const ContentFilters = ({ contentType }: ContentFilterProps) => {
         const endPoints: Record<TabType, string> = {
             trending: contentType === 'all' ? '/trending/all/week' : `/trending/${contentType}/week`,
             popular: contentType === 'all' ? '/trending/all/day' : `/${contentType}/popular`,
-            premieres: contentType === 'movie' ? '/movie/upcoming' : '/tv/on_the_air',
+            premieres: contentType === 'movie'
+                ? '/movie/upcoming'
+                : contentType === 'tv'
+                ? '/tv/on_the_air'
+                : '/trending/all/week',
             recent: contentType === 'movie'
-                ? `/discover/movie?primary_release_date.gte=${getCurrentMonthStart()}` :
-                `/discover/tv?first_air_date.gte=${getCurrentMonthStart()}`
+                ? `/discover/movie?primary_release_date.gte=${getCurrentMonthStart()}`
+                : contentType === 'tv'
+                ? `/discover/tv?first_air_date.gte=${getCurrentMonthStart()}`
+                : '/trending/all/week'
         }
         const fetchContent = async () => {
             setLoading(true);
@@ -50,22 +56,22 @@ const ContentFilters = ({ contentType }: ContentFilterProps) => {
     }, [activeTab, contentType])
 
     const tabs: { id: TabType; label: string, icon: ReactNode }[] = [
-        { id: 'trending', label: 'Trends Now', icon: <TrendingUp className="size-5 mt-1" /> },
-        { id: 'popular', label: 'Popular', icon: <Flame className="size-5 fill-white stroke-white" /> },
-        { id: 'premieres', label: 'Premieres', icon: <Star className="size-5 fill-white stroke-white" /> },
-        { id: 'recent', label: 'Recently Added', icon: <Plus className="size-5" /> }
+        { id: 'trending', label: 'Trends Now', icon: <TrendingUp className={`${activeTab==='trending'?'size-8':'size-5'} mt-1`} /> },
+        { id: 'popular', label: 'Popular', icon: <Flame className={`${activeTab==='popular'?'size-8':'size-5'} fill-white stroke-white`} /> },
+        { id: 'premieres', label: 'Premieres', icon: <Star className={`${activeTab==='premieres'?'size-8':'size-5'} fill-white stroke-white`} /> },
+        { id: 'recent', label: 'Recently Added', icon: <Plus className={`${activeTab==='recent'?'size-8':'size-5'}`} /> }
     ]
 
 
     return (
         <div className="">
-            <div className="flex gap-5 justify-between max-w-[90%] mx-auto pb-3 pt-10">
+            <div className="flex gap-10 scrollbar-hidden justify-between max-w-[90%] mx-auto pb-3 pt-10 overflow-auto md:overflow-visible">
                 {tabs.map(tab => (
                     <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`flex gap-2 items-center cursor-pointer text-white transition-all duration-300 font-bold text-sm ${activeTab === tab.id
-                            ? ' text-white scale-150 '
+                        className={`flex gap-2 items-center text-nowrap cursor-pointer text-white transition-all duration-300 font-bold text-sm ${activeTab === tab.id
+                            ? ' text-white text-2xl!'
                             : 'opacity-50'
                             }`}
                     >   {tab.icon}

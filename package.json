@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:https": "vite --https",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -12,14 +13,17 @@
   "dependencies": {
     "@headlessui/react": "^2.2.9",
     "@reduxjs/toolkit": "^2.11.2",
+    "@stripe/stripe-js": "^8.11.0",
     "@tailwindcss/vite": "^4.2.1",
     "axios": "^1.13.5",
+    "firebase": "^12.11.0",
     "framer-motion": "^12.35.0",
     "lucide-react": "^0.575.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.13.1",
+    "stripe": "^20.4.1",
     "swiper": "^12.1.2",
     "tailwindcss": "^4.2.1"
   },

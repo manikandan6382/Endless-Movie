@@ -43,7 +43,7 @@ const Banner = ({ contentType = 'all' }: BannerProps) => {
                 </div>
             )}
             {(loading || !movie) ? (
-                <BannerSkeleton />
+                <BannerSkeleton isPoster={false}/>
             ) : (
                 <section className="relative">
                     <AnimatePresence mode="wait">
@@ -55,12 +55,12 @@ const Banner = ({ contentType = 'all' }: BannerProps) => {
                             transition={{ duration: 0.5 }}
                         >
                             <div>
-                                <img src={getImageUrl(movie.backdrop_path || '')} alt="title" className='bg-layer' />
+                                <img src={getImageUrl(movie.backdrop_path ?? '')} alt="title" className='bg-layer' />
                             </div>
-                            <div className="bg-movie-details min-h-[85dvh]">
+                            <div className="bg-movie-details md:min-h-[85dvh] min-h-[50dvh]">
                                 <div
-                                    className="bg-cover bg-backdrop-before bg-center flex justify-center flex-col min-h-[85dvh]"
-                                    style={{ backgroundImage: `url(${getImageUrl(movie.backdrop_path || '')})` }}
+                                    className="bg-cover bg-backdrop-before bg-center flex justify-center flex-col md:min-h-[85dvh] min-h-[50dvh]"
+                                    style={{ backgroundImage: `url(${getImageUrl(window.innerWidth > 767 ? movie.backdrop_path : movie.poster_path)})` }}
                                 >
                                     <div className="flex flex-col gap-10 text-white font-bold max-w-2xl px-5 md:pl-20 mt-10">
                                         <div className="flex flex-col gap-6">
@@ -85,12 +85,12 @@ const Banner = ({ contentType = 'all' }: BannerProps) => {
                                                     <p className='opacity-90'><span>{getGenreNames()}</span></p>
                                                 )}
                                             </div>
-                                            <h1 className='text-6xl tracking-widest leading-18'>
+                                            <h1 className='text-6xl tracking-widest leading-18 hidden md:block'>
                                                 {movie?.title || movie?.name || movie?.original_name}
                                             </h1>
                                         </div>
-                                        <p className='leading-8 line-clap-3'>{movie?.overview || ''}</p>
-                                        <div className="flex gap-5">
+                                        <p className='leading-8 line-clamp-3 hidden! md:[display:-webkit-box]!'>{movie?.overview || ''}</p>
+                                        <div className="flex gap-5 pb-6">
                                             <motion.button
                                                 onClick={handleWatch}
                                                 whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(229,9,20,0.6)" }}

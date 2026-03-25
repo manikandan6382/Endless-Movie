@@ -1,3 +1,6 @@
+import {initializeApp} from "firebase/app";
+import {getAuth} from "firebase/auth";
+import {getFirestore} from "firebase/firestore";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -12,3 +15,8 @@ const firebaseConfig = {
 if (!import.meta.env.VITE_FIREBASE_API_KEY) {
   throw new Error('VITE_FIREBASE_API_KEY is required. Please add it to your .env file.');
 }
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+const  db = getFirestore();
+
+export {app , auth, db };
