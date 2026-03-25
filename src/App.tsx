@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from './store/store'
+import { Analytics } from '@vercel/analytics/react'
 import HomeScreen from './Pages/HomeScreen/HomeScreen'
 import MovieDetails from './Pages/MovieDetails/MovieDetails'
 import SearchResults from './Pages/SearchResults/SearchResults'
@@ -58,6 +59,7 @@ function App() {
           <AppRoutes />
         </AuthProvider>
       </Router>
+      <Analytics />
     </ErrorBoundary>
   )
 }
