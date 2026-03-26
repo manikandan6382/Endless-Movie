@@ -1,12 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight, Github, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/useAuth';
 
 const Signup = () => {
-    const { signup, loginWithGoogle, loginWithGithub } = useAuth();
+    const { signup, loginWithGoogle, loginWithGithub, handleRedirectResult } = useAuth();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const checkRedirect = async () => {
+            try {
+                const result = await handleRedirectResult();
+                if (result?.user) navigate('/');
+            } catch { /* no redirect result */ }
+        };
+        checkRedirect();
+    }, [handleRedirectResult, navigate]);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -97,26 +107,14 @@ const Signup = () => {
     };
 
     const handleSocialSignup = async (provider: string) => {
-        // Check if running on HTTP localhost
-        if (window.location.protocol === 'http:' && window.location.hostname === 'localhost') {
-            setErrors({ 
-                general: `Social signup requires HTTPS. Run 'npm run dev:https' or test with email/password.`
-            });
-            return;
-        }
-
         setIsLoading(true);
         try {
-            if (provider === 'google') {
-                await loginWithGoogle();
-            } else if (provider === 'github') {
-                await loginWithGithub();
-            }
+            if (provider === 'google') await loginWithGoogle();
+            else if (provider === 'github') await loginWithGithub();
             navigate('/');
-        } catch {
-            setErrors({ 
-                general: `Failed to sign up with ${provider}. Please try again.`
-            });
+        } catch (error) {
+            const code = (error as { code?: string })?.code;
+            setErrors({ general: code || `Failed to sign up with ${provider}. Please try again.` });
         } finally {
             setIsLoading(false);
         }

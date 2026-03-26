@@ -95,9 +95,10 @@ const Login = () => {
                 await loginWithGithub();
             }
             navigate('/');
-        } catch {
+        } catch (error) {
+            const code = (error as { code?: string })?.code;
             setErrors({ 
-                general: `Failed to sign in with ${provider}. Please try again.`
+                general: code || `Failed to sign in with ${provider}. Please try again.`
             });
         } finally {
             setIsLoading(false);

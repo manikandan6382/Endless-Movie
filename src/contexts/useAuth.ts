@@ -3,7 +3,6 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   sendPasswordResetEmail,
-  signInWithPopup,
   signInWithRedirect,
   getRedirectResult,
   updateProfile
@@ -30,15 +29,9 @@ export const useAuth = () => {
 
   const resetPassword = (email: string) => sendPasswordResetEmail(auth, email);
 
-  const loginWithGoogle = () => {
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    return isMobile ? signInWithRedirect(auth, googleProvider) : signInWithPopup(auth, googleProvider);
-  };
+  const loginWithGoogle = () => signInWithRedirect(auth, googleProvider);
 
-  const loginWithGithub = () => {
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    return isMobile ? signInWithRedirect(auth, githubProvider) : signInWithPopup(auth, githubProvider);
-  };
+  const loginWithGithub = () => signInWithRedirect(auth, githubProvider);
 
   const handleRedirectResult = async () => {
     const result = await getRedirectResult(auth);
