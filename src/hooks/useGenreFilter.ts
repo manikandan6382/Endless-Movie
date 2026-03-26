@@ -11,7 +11,7 @@ export const useGenreFilter = (contentType: ContentType) => {
         return getItem(`selectedGenres_${contentType}`, []);
     });
     const [selectedYear, setSelectedYear] = useState<string>('all');
-    const [sortBy, setSortBy] = useState<SortType>('latest');
+    const [sortBy, setSortBy] = useState<SortType>('top_rated');
     const [genreData, setGenreData] = useState<Record<number, Movie[]>>({});
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
