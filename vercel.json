@@ -1,4 +1,15 @@
 {
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin-allow-popups"
+        }
+      ]
+    }
+  ],
   "rewrites": [
     { "source": "/api/tmdb/:path*", "destination": "/api/tmdb/[...path]" },
     { "source": "/api/image/:path*", "destination": "/api/image/[...path]" },

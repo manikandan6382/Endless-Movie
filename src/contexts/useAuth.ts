@@ -3,7 +3,7 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   sendPasswordResetEmail,
-  signInWithRedirect,
+  signInWithPopup,
   getRedirectResult,
   updateProfile
 } from 'firebase/auth';
@@ -29,9 +29,9 @@ export const useAuth = () => {
 
   const resetPassword = (email: string) => sendPasswordResetEmail(auth, email);
 
-  const loginWithGoogle = () => signInWithRedirect(auth, googleProvider);
+  const loginWithGoogle = () => signInWithPopup(auth, googleProvider);
 
-  const loginWithGithub = () => signInWithRedirect(auth, githubProvider);
+  const loginWithGithub = () => signInWithPopup(auth, githubProvider);
 
   const handleRedirectResult = async () => {
     const result = await getRedirectResult(auth);
