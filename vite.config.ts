@@ -2,7 +2,6 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
-// https://vite.dev/config/
 export default defineConfig({
   server: {
     host: '0.0.0.0',
@@ -15,4 +14,17 @@ export default defineConfig({
     }),
     tailwindcss(),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'firebase': ['firebase/app', 'firebase/auth'],
+          'redux': ['@reduxjs/toolkit', 'react-redux'],
+          'motion': ['framer-motion'],
+          'stripe': ['@stripe/stripe-js'],
+        },
+      },
+    },
+  },
 })
