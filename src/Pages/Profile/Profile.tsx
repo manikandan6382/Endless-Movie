@@ -26,22 +26,42 @@ const Profile = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Show local preview immediately
     const localUrl = URL.createObjectURL(file);
     setPreviewUrl(localUrl);
     setUploading(true);
 
     try {
-      // Convert to base64 data URL (no storage needed)
-      const reader = new FileReader();
-      reader.onload = async () => {
-        const dataUrl = reader.result as string;
-        await updateUserProfile(dataUrl);
-        setPreviewUrl(null);
-      };
-      reader.readAsDataURL(file);
-    } catch (err) {
-      console.error("Failed to update photo:", err);
+      // Resize to 200x200 before uploading
+      const img = new Image();
+      img.src = localUrl;
+      await new Promise(res => { img.onload = res; });
+
+      const canvas = document.createElement('canvas');
+      canvas.width = 200;
+      canvas.height = 200;
+      canvas.getContext('2d')!.drawImage(img, 0, 0, 200, 200);
+
+      const blob = await new Promise<Blob>(res =>
+        canvas.toBlob(b => res(b!), 'image/jpeg', 0.8)
+      );
+
+      const formData = new FormData();
+      formData.append('file', blob, 'avatar.jpg');
+      formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET);
+      formData.append('folder', 'netflix-avatars');
+
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`,
+        { method: 'POST', body: formData }
+      );
+      const data = await res.json();
+      if (!data.secure_url || !data.secure_url.startsWith('https://res.cloudinary.com/')) 
+        throw new Error('Invalid upload response');
+
+      await updateUserProfile(data.secure_url);
+      setPreviewUrl(null);
+    } catch {
+      console.error('Failed to update photo:');
       setPreviewUrl(null);
     } finally {
       setUploading(false);

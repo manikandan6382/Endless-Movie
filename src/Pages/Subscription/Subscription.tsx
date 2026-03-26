@@ -46,8 +46,8 @@ const Subscription = () => {
       const { url, error: apiError } = await response.json();
       if (apiError) throw new Error(apiError);
       window.location.href = url;
-    } catch (err: any) {
-      setError(err.message || 'Something went wrong. Please try again.');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
     } finally {
       setLoadingPlan(null);
     }
@@ -56,7 +56,7 @@ const Subscription = () => {
   return (
     <div className="min-h-screen bg-netflix-dark-gray text-white">
       <Nav />
-      <div className="pt-24 pb-16 px-6">
+      <div className="pt-24 pb-20 px-6">
         <div className="max-w-5xl mx-auto">
 
           <div className="text-center mb-12">

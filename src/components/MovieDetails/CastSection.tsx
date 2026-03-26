@@ -31,7 +31,7 @@ const CastSection = ({ cast }: castSectionProps) => {
         <Slider
             title='Top Cast'
             showNavigation={true}
-            slidesPerView={{ mobile: 2, md: 5, lg: 7, xxxl: 8 }}
+            slidesPerView={{ mobile: 3, md: 4, lg: 5, xl: 6, xxl: 7 }}
         >
             {createCards}
         </Slider>

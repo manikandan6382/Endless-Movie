@@ -3,6 +3,9 @@ import "./Nav.css";
 import SearchBar from "./SearchBar";
 import { Home, MonitorSmartphone, Popcorn, Search } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../../contexts/useAuth";
+
+const DEFAULT_AVATAR = "https://imgs.search.brave.com/9Sif716P2JZdFr0lCg1qTRpKQlUFl42lAG606LJ3eL0/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzEyLzE5Lzc3LzAz/LzM2MF9GXzEyMTk3/NzAzNzZfSlhEWEla/OFZqb1VWNUNQR3RJ/NDZMeGMyRkQ4UUc5/aDUuanBn";
 
 const Nav = () => {
   const [bgScroll, setBgScroll] = useState(false);
@@ -10,11 +13,13 @@ const Nav = () => {
   const [hidden, setHidden] = useState(false);
   const lastScrollY = useRef(0);
   const location = useLocation();
+  const { currentUser } = useAuth();
+  const avatar = currentUser?.photoURL || DEFAULT_AVATAR;
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      if (currentScrollY > 200) {
+      if (currentScrollY > 30) {
         setBgScroll(true);
       } else {
         setBgScroll(false);
@@ -40,7 +45,7 @@ const Nav = () => {
     <div className="">
       {/* Desktop Navigation */}
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-150 ease-linear  ${hidden ? "-translate-y-full" : "translate-y-0"} ${bgScroll ? "bg-black/90 backdrop-blur-md shadow-lg" : "bg-gradient-to-b from-black/80 to-transparent"}`}
+        className={`fixed top-0 left-0 right-0 z-50 w-full transition-transform duration-250 ease-linear  ${hidden ? "-translate-y-full" : "translate-y-0"} ${bgScroll ? "bg-black/90 backdrop-blur-md shadow-lg" : "bg-gradient-to-b from-black/80 to-transparent"}`}
       >
         <div className="flex lg:gap-25 md:gap-15 gap-5 text-white px-6 py-4 text-xl items-center">
           <Link to="/" className="shrink-0">
@@ -86,7 +91,7 @@ const Nav = () => {
             </div>
             <Link to="/profile" className="hidden md:block">
               <img
-                src="https://imgs.search.brave.com/9Sif716P2JZdFr0lCg1qTRpKQlUFl42lAG606LJ3eL0/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzEyLzE5Lzc3LzAz/LzM2MF9GXzEyMTk3/NzAzNzZfSlhEWEla/OFZqb1VWNUNQR3RJ/NDZMeGMyRkQ4UUc5/aDUuanBn"
+                src={avatar}
                 alt="Profile"
                 className="object-cover rounded-full w-8 h-8 hover:ring-2 hover:ring-netflix-red transition-all"
               />
@@ -96,7 +101,7 @@ const Nav = () => {
           {/* Mobile Profile - Only show on mobile */}
           <Link to="/profile" className="md:hidden ml-auto">
             <img
-              src="https://imgs.search.brave.com/9Sif716P2JZdFr0lCg1qTRpKQlUFl42lAG606LJ3eL0/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzEyLzE5Lzc3LzAz/LzM2MF9GXzEyMTk3/NzAzNzZfSlhEWEla/OFZqb1VWNUNQR3RJ/NDZMeGMyRkQ4UUc5/aDUuanBn"
+              src={avatar}
               alt="Profile"
               className={`object-cover rounded-full w-10 h-10 transition-all duration-200 ${
                 isActive("/profile")
@@ -120,7 +125,7 @@ const Nav = () => {
                 ✕
               </button>
               <div className="flex-1">
-                <SearchBar bgScroll={true} isMobile={true} />
+                <SearchBar bgScroll={true} isMobile={true} onSearch={() => setShowMobileSearch(false)} />
               </div>
             </div>
           </div>
@@ -179,7 +184,7 @@ const Nav = () => {
             >
               <div className="relative">
                 <img
-                  src="https://imgs.search.brave.com/9Sif716P2JZdFr0lCg1qTRpKQlUFl42lAG606LJ3eL0/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzEyLzE5Lzc3LzAz/LzM2MF9GXzEyMTk3/NzAzNzZfSlhEWEla/OFZqb1VWNUNQR3RJ/NDZMeGMyRkQ4UUc5/aDUuanBn"
+                  src={avatar}
                   alt="Profile"
                   className={`w-6 h-6 rounded-full object-cover transition-all ${
                     isActive("/profile") ? "ring-2 ring-netflix-red" : ""

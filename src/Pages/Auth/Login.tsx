@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock, ArrowRight, Github, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/useAuth';
 
 const Login = () => {
-    const { login, loginWithGoogle, loginWithGithub } = useAuth();
+    const { login, loginWithGoogle, loginWithGithub, handleRedirectResult } = useAuth();
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: '',
@@ -15,6 +15,19 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState<{[key: string]: string}>({});
     const [rememberMe, setRememberMe] = useState(false);
+
+    // Handle redirect result on mount
+    useEffect(() => {
+        const checkRedirect = async () => {
+            try {
+                const result = await handleRedirectResult();
+                if (result?.user) navigate('/');
+            } catch {
+                setErrors({ general: 'Failed to sign in. Please try again.' });
+            }
+        };
+        checkRedirect();
+    }, [handleRedirectResult, navigate]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -74,14 +87,6 @@ const Login = () => {
     };
 
     const handleSocialLogin = async (provider: string) => {
-        // Check if running on HTTP localhost
-        if (window.location.protocol === 'http:' && window.location.hostname === 'localhost') {
-            setErrors({ 
-                general: `Social login requires HTTPS. Run 'npm run dev:https' or test with email/password.`
-            });
-            return;
-        }
-
         setIsLoading(true);
         try {
             if (provider === 'google') {

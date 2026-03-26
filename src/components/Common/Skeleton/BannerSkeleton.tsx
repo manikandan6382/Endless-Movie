@@ -6,7 +6,7 @@ const BannerSkeleton = ({isPoster = true} : {isPoster?: boolean}) => {
                         <div className="bg-cover bg-backdrop-before bg-center flex justify-center flex-col min-h-[85dvh]">
                             <div className="">
 
-                                <div className="flex gap-5 lg:gap-20 max-w-6xl mx-auto items-center mt-10 lg:ps-10 px-5">
+                                <div className="flex gap-5 lg:gap-20 max-w-6xl mx-auto items-center mt-10 lg:ps-10 px-5 flex-wrap lg:flex-nowrap justify-center lg:justify-start">
 
                                    { isPoster && <div className="bg-skel animate-pulse h-100 rounded-lg shadow-xl w-full max-w-75">
                                     </div>}
@@ -33,7 +33,7 @@ const BannerSkeleton = ({isPoster = true} : {isPoster?: boolean}) => {
                                             <div className="animate-pulse h-11 rounded-full w-full max-w-45"></div>
                                         </div>
                                     </div>
-                                </div>
+                            </div>
                             </div>
                         </div>
                     </div>

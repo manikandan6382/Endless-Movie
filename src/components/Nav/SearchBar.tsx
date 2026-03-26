@@ -8,9 +8,10 @@ import { AnimatePresence } from "framer-motion";
 interface SearchBarProp {
     bgScroll: boolean;
     isMobile?: boolean;
+    onSearch?: () => void;
 }
 
-const SearchBar = ({ bgScroll, isMobile = false }: SearchBarProp) => {
+const SearchBar = ({ bgScroll, isMobile = false, onSearch }: SearchBarProp) => {
     const [query, setQuery] = useState('');
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
@@ -25,6 +26,7 @@ const SearchBar = ({ bgScroll, isMobile = false }: SearchBarProp) => {
             setShowSuggestions(false);
             setQuery('');
             inputRef.current?.blur();
+            onSearch?.();
         }
     };
 
@@ -115,6 +117,7 @@ const SearchBar = ({ bgScroll, isMobile = false }: SearchBarProp) => {
                         onSelect={() => {
                             setShowSuggestions(false);
                             setQuery('');
+                            onSearch?.();
                         }}
                         isMobile={isMobile}
                     />
