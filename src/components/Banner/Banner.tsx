@@ -1,10 +1,11 @@
 import { getImageUrl } from '../../helpers/imageHelper';
-import { Star, Plus, Play, Clock4, CalendarDays, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Star, Plus, Play, Clock4, CalendarDays, ChevronLeft, ChevronRight, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useBanner } from '../../hooks/useBanner';
 import BannerSkeleton from '../Common/Skeleton/BannerSkeleton';
 import { useState } from 'react';
+import { useWatchlist } from '../../hooks/useWatchlist';
 
 interface BannerProps {
     contentType?: 'all' | 'movie' | 'tv';
@@ -14,6 +15,9 @@ const Banner = ({ contentType = 'all' }: BannerProps) => {
     const { movie, duration, mediaType, getGenreNames, loading, error, currentIndex, totalMovies, setCurrentIndex } = useBanner(contentType);
     const navigate = useNavigate();
     const [bgLoaded, setBgLoaded] = useState<number | null>(null);
+
+    const { isInWatchlist, toggleWatchlist } = useWatchlist();
+    const inList = movie ? isInWatchlist(movie.id) : false;
 
     const handleWatch = () => {
         if (movie?.id) navigate(`/${mediaType}/${movie.id}`);
@@ -104,11 +108,23 @@ const Banner = ({ contentType = 'all' }: BannerProps) => {
                                                 <Play className='size-5 fill-white' />watch
                                             </motion.button>
                                             <motion.button
+                                                onClick={() => movie && toggleWatchlist({
+                                                    id: movie.id,
+                                                    title: movie.title || movie.name || '',
+                                                    poster_path: movie.poster_path ?? null,
+                                                    media_type: mediaType as 'movie' | 'tv',
+                                                    vote_average: movie.vote_average,
+                                                    release_date: movie.release_date,
+                                                    first_air_date: movie.first_air_date,
+                                                })}
                                                 whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(255,255,255,0.3)" }}
                                                 whileTap={{ scale: 0.95 }}
-                                                className='text-nowrap font-bold btn-black-neon flex items-center gap-4 h-12 text-sm px-6 max-w-45 w-full justify-center uppercase rounded-full'
+                                                className={`text-nowrap font-bold flex items-center gap-4 h-12 text-sm px-6 max-w-45 w-full justify-center uppercase rounded-full transition-all duration-200 ${
+                                                    inList ? 'btn-netflix-neon' : 'btn-black-neon'
+                                                }`}
                                             >
-                                                <Plus />add list
+                                                {inList ? <Check className='size-5' /> : <Plus />}
+                                                {inList ? 'added' : 'add list'}
                                             </motion.button>
                                         </div>
                                     </div>

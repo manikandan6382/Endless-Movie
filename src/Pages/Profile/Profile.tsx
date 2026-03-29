@@ -3,6 +3,7 @@ import { User, Settings, Heart, Clock, Download, LogOut, CreditCard, Camera } fr
 import { useAuth } from "../../contexts/useAuth";
 import { useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
+import { useWatchlist } from "../../hooks/useWatchlist";
 
 const DEFAULT_AVATAR = "https://imgs.search.brave.com/9Sif716P2JZdFr0lCg1qTRpKQlUFl42lAG606LJ3eL0/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzEyLzE5Lzc3LzAz/LzM2MF9GXzEyMTk3/NzAzNzZfSlhEWEla/OFZqb1VWNUNQR3RJ/NDZMeGMyRkQ4UUc5/aDUuanBn";
 
@@ -12,6 +13,7 @@ const Profile = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const { watchlist } = useWatchlist();
 
   const handleLogout = async () => {
     try {
@@ -76,7 +78,7 @@ const Profile = () => {
   const menuItems = [
     { icon: CreditCard, label: "Subscription", description: "Manage your plan", onClick: () => navigate("/subscription") },
     { icon: User, label: "Account Settings", description: "Manage your account details", onClick: () => {} },
-    { icon: Heart, label: "My List", description: "Your saved movies and shows", onClick: () => {} },
+    { icon: Heart, label: `My List (${watchlist.length})`, description: "Your saved movies and shows", onClick: () => navigate('/my-list') },
     { icon: Clock, label: "Watch History", description: "Recently watched content", onClick: () => {} },
     { icon: Download, label: "Downloads", description: "Offline content", onClick: () => {} },
     { icon: Settings, label: "App Settings", description: "Preferences and settings", onClick: () => {} },
@@ -141,8 +143,7 @@ const Profile = () => {
               </button>
             ))}
 
-            {/* Logout */}
-            <button
+            {/* Logout */}<button
               onClick={handleLogout}
               className="flex items-center gap-4 p-6 bg-red-900/20 rounded-lg hover:bg-red-900/30 transition-all duration-200 group mt-4"
             >
@@ -155,6 +156,8 @@ const Profile = () => {
               </div>
             </button>
           </div>
+
+
 
         </div>
       </div>

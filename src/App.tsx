@@ -17,6 +17,7 @@ const Signup = lazy(() => import('./Pages/Auth/Signup'))
 const ForgotPassword = lazy(() => import('./Pages/Auth/ForgotPassword'))
 const Subscription = lazy(() => import('./Pages/Subscription/Subscription'))
 const SubscriptionSuccess = lazy(() => import('./Pages/Subscription/SubscriptionSuccess'))
+const MyList = lazy(() => import('./Pages/MyList/MyList'))
 
 const AppRoutes = () => {
   const { currentUser } = useSelector((state: RootState) => state.auth);
@@ -42,6 +43,7 @@ const AppRoutes = () => {
             <Route path='/:type/:id' element={<MovieDetails />} />
             <Route path='/subscription' element={<Subscription />} />
             <Route path='/subscription/success' element={<SubscriptionSuccess />} />
+            <Route path='/my-list' element={<MyList />} />
             <Route path='/login' element={<HomeScreen />} />
             <Route path='/signup' element={<HomeScreen />} />
             <Route path='/forgot-password' element={<HomeScreen />} />

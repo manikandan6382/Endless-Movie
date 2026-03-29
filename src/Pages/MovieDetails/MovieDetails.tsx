@@ -38,6 +38,7 @@ const MovieDetails = () => {
         <MovieHero
           data={banner}
           duration={duration}
+          mediaType={validType}
           trailerKey={
             videos.find((v) => v.type === "Trailer")?.key ||
             videos.find((v) => v.type === "Teaser")?.key ||

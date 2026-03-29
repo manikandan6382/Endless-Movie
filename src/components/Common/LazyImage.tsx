@@ -5,9 +5,10 @@ interface LazyImageProps {
     src: string;
     alt: string;
     className?: string;
+    onClick?: () => void;
 }
 
-const LazyImage = ({ src, alt, className = '' }: LazyImageProps) => {
+const LazyImage = ({ src, alt, className = '', onClick }: LazyImageProps) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [hasError, setHasError] = useState(false);
 
@@ -18,7 +19,7 @@ const LazyImage = ({ src, alt, className = '' }: LazyImageProps) => {
     }
 
     return (
-        <div className="relative rounded-lg overflow-hidden">
+        <div className="relative rounded-lg overflow-hidden" onClick={onClick}>
             {/* Skeleton while loading */}
             {!isLoaded && (
                 <div className={`absolute! inset-0 animate-pulse`}></div>

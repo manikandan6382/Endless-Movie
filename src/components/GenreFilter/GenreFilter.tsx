@@ -42,7 +42,7 @@ const GenreFilter = ({ contentType }: GenreFilterProps) => {
           selectedGenres.includes(genre.id)
             ? "bg-netflix-red text-white shadow-lg"
             : "bg-black/90 text-white hover:scale-105 text-sm"
-        }`}
+        } ${genre.name === 'Action & Adventure' && window.innerWidth <= 768? 'text-[12px]':''} `}
       >
         {genre.name}
       </Button>

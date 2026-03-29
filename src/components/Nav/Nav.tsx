@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "./Nav.css";
 import SearchBar from "./SearchBar";
-import { Home, MonitorSmartphone, Popcorn, Search } from "lucide-react";
+import { Home, MonitorSmartphone, Plus, Popcorn, Search } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/useAuth";
 
@@ -81,6 +81,14 @@ const Nav = () => {
               }`}
             >
               TV Shows
+            </Link>
+            <Link
+              to="/my-list"
+              className={`hover:text-netflix-red transition-colors font-medium flex gap-2 items-center ${
+                isActive("/my-list") ? "text-white" : "text-white/70"
+              }`}
+            >
+              My List <Plus className="size-5"/>
             </Link>
           </div>
 

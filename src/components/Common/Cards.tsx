@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { getImageUrl } from '../../helpers/imageHelper';
-import { Star } from 'lucide-react';
+import { Star, Heart } from 'lucide-react';
 import Slider from '../Common/Slider';
 import type { Movie } from '../../types/movie';
 import LazyImage from './LazyImage';
+import { useWatchlist } from '../../hooks/useWatchlist';
+
 interface cardSectionProps {
     movies: Movie[];
     type: 'all' | 'movie' | 'tv';
@@ -20,46 +22,66 @@ interface cardSectionProps {
 }
 const Cards = ({ movies, type, title, breakPoints, arrowClassName }: cardSectionProps) => {
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const { isInWatchlist, toggleWatchlist } = useWatchlist();
+
     const createCards = movies.map(movie => {
         const releaseDate = movie.release_date || movie.first_air_date;
         const formattedDate = releaseDate
-            ? new Date(releaseDate).toLocaleDateString('en-US', {
-                year: 'numeric',
-            })
+            ? new Date(releaseDate).toLocaleDateString('en-US', { year: 'numeric' })
             : '';
         const getNavigationType = () => {
-            if (type !== 'all') return type
+            if (type !== 'all') return type;
             return movie.media_type || (movie.title ? 'movie' : 'tv');
         }
+        const mediaType = getNavigationType() as 'movie' | 'tv';
+        const inList = isInWatchlist(movie.id);
+
         return (
-            <div
-                key={movie.id}
-                onClick={() => navigate(`/${getNavigationType()}/${movie.id}`)}
-                className="cursor-pointer group aspect-2/3"
-            >
+            <div key={movie.id} className="cursor-pointer group aspect-2/3">
                 <div className="flex flex-col gap-4">
                     <div className="drop-shadow-2xl">
-                        <div className="overflow-hidden rounded-lg">
+                        <div className="overflow-hidden rounded-lg" onClick={() => navigate(`/${mediaType}/${movie.id}`)  }>
                             <LazyImage
                                 src={getImageUrl(movie.poster_path || '', 'w342')}
                                 alt={movie.title || movie.name || 'Movie poster'}
-                                className="w-full aspect-2/3 object-cover group-hover:scale-110 transition duration-300 "
+                                className="w-full aspect-2/3 object-cover group-hover:scale-110 transition duration-300"
                             />
                         </div>
                     </div>
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-2" onClick={() => navigate(`/${mediaType}/${movie.id}`)}>
                         <p className="text-white font-medium truncate">{movie.title || movie.name}</p>
                         <div className="flex items-center justify-between gap-3">
                             <p className='text-gray-400 text-sm font-semibold'>{formattedDate}</p>
-                            {movie.vote_average > 0 ? (
-                                <div className="flex items-center gap-1">
-                                    <Star className="size-4 fill-yellow-400 text-yellow-400" />
-                                    <span className="text-white text-sm">{movie.vote_average.toFixed(1)}</span>
-                                </div>
-                            ) : (
-                                <span className="rounded-full tracking-wider bg-black/80 backdrop-blur-md text-white text-[10px] px-4 py-2 flex items-center leading-1 font-bold">NEW</span>
-                            )}
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        toggleWatchlist({
+                                            id: movie.id,
+                                            title: movie.title || movie.name || '',
+                                            poster_path: movie.poster_path || null,
+                                            media_type: mediaType,
+                                            vote_average: movie.vote_average,
+                                            release_date: movie.release_date,
+                                            first_air_date: movie.first_air_date,
+                                        });
+                                    }}
+                                    className="cursor-pointer"
+                                >
+                                    <Heart className={`size-4 transition-colors ${
+                                        inList ? 'fill-netflix-red text-netflix-red' : 'text-white/50 hover:text-netflix-red'
+                                    }`} />
+                                </button>
+                                {movie.vote_average > 0 ? (
+                                    <div className="flex items-center gap-1">
+                                        <Star className="size-4 fill-yellow-400 text-yellow-400" />
+                                        <span className="text-white text-sm">{movie.vote_average.toFixed(1)}</span>
+                                    </div>
+                                ) : (
+                                    <span className="rounded-full tracking-wider bg-black/80 backdrop-blur-md text-white text-[10px] px-4 py-2 flex items-center leading-1 font-bold">NEW</span>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>

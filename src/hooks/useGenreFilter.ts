@@ -8,7 +8,8 @@ import { getItem, setItem } from '../helpers/storage';
 export const useGenreFilter = (contentType: ContentType) => {
     const [orderBy, setOrderBy] = useState<OrderType>('asc');
     const [selectedGenres, setSelectGenres] = useState<number[]>(() => {
-        return getItem(`selectedGenres_${contentType}`, []);
+        const saved = getItem(`selectedGenres_${contentType}`, []);
+        return saved.length > 0 ? saved : [16, 18, 35, 80];
     });
     const [selectedYear, setSelectedYear] = useState<string>('all');
     const [sortBy, setSortBy] = useState<SortType>('top_rated');

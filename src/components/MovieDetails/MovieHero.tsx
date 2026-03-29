@@ -1,12 +1,14 @@
 import { getImageUrl } from '../../helpers/imageHelper';
-import { Star, Plus, Play, Languages, CalendarDays, Clock4 } from 'lucide-react'
+import { Star, Plus, Play, Languages, CalendarDays, Clock4, Check } from 'lucide-react'
 import type { MovieData } from '../../types/movieDetails';
 import { useState } from 'react';
 import LazyImage from '../Common/LazyImage';
+import { useWatchlist } from '../../hooks/useWatchlist';
 
 interface MovieHeroProps {
     data: MovieData | null;
     duration: string;
+    mediaType: 'movie' | 'tv';
     trailerKey?: string | null;
     showTrailer?: boolean;
     onPlayTrailer?: () => void;
@@ -14,8 +16,10 @@ interface MovieHeroProps {
 }
 
 
-const MovieHero = ({ data, duration, trailerKey, showTrailer, onPlayTrailer, onCloseTrailer }: MovieHeroProps) => {
+const MovieHero = ({ data, duration, mediaType, trailerKey, showTrailer, onPlayTrailer, onCloseTrailer }: MovieHeroProps) => {
     const [bgLoaded, setBgLoaded] = useState(false);
+    const { isInWatchlist, toggleWatchlist } = useWatchlist();
+    const inList = data ? isInWatchlist(data.id) : false;
 
     const title = data?.title || data?.name;
     const releaseDate = data?.release_date || data?.first_air_date;
@@ -107,7 +111,23 @@ const MovieHero = ({ data, duration, trailerKey, showTrailer, onPlayTrailer, onC
                                             >
                                                 <Play className='size-5 fill-white' />watch
                                             </button>
-                                            <button className='text-nowrap font-bold btn-black-neon flex items-center gap-4 h-12 text-sm px-6 max-w-45 w-full justify-center uppercase rounded-full'><Plus className='' />add list</button>
+                                            <button
+                                                onClick={() => data && toggleWatchlist({
+                                                    id: data.id,
+                                                    title: data.title || data.name || '',
+                                                    poster_path: data.poster_path,
+                                                    media_type: mediaType,
+                                                    vote_average: data.vote_average,
+                                                    release_date: data.release_date,
+                                                    first_air_date: data.first_air_date,
+                                                })}
+                                                className={`text-nowrap font-bold flex items-center gap-4 h-12 text-sm px-6 max-w-45 w-full justify-center uppercase rounded-full transition-all duration-200 ${
+                                                    inList ? 'btn-netflix-neon' : 'btn-black-neon'
+                                                }`}
+                                            >
+                                                {inList ? <Check className='size-5' /> : <Plus />}
+                                                {inList ? 'added' : 'add list'}
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
