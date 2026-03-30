@@ -27,13 +27,17 @@ const Dropdown = ({ value, options, onChange, label }: DropdownProps) => {
 
     useEffect(() => {
         if (!isOpen) return;
-        // close on any scroll or resize anywhere
-        const close = () => setIsOpen(false);
-        window.addEventListener('scroll', close, true);
-        window.addEventListener('resize', close);
+        // update position on scroll instead of closing
+        const handleScroll = (e: Event) => {
+            // only close if the dropdown popup itself is not being scrolled
+            if (popupRef.current && popupRef.current.contains(e.target as Node)) return;
+            updatePosition();
+        };
+        window.addEventListener('scroll', handleScroll, true);
+        window.addEventListener('resize', updatePosition);
         return () => {
-            window.removeEventListener('scroll', close, true);
-            window.removeEventListener('resize', close);
+            window.removeEventListener('scroll', handleScroll, true);
+            window.removeEventListener('resize', updatePosition);
         };
     }, [isOpen]);
 

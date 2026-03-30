@@ -171,7 +171,7 @@ const Nav = () => {
               }`}
             >
               <MonitorSmartphone className="w-6 h-6" />
-              <span className="text-xs font-medium">TV Shows</span>
+              <span className="text-xs font-medium text-nowrap">TV Shows</span>
             </Link>
 
             <button
