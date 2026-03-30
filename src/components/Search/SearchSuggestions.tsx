@@ -52,7 +52,7 @@ const SearchSuggestion = ({ results, onSelect, query }: searchSuggestionProp) =>
                     <LazyImage
                         src={getImageUrl(item.poster_path || '', 'w92')}
                         alt={item.title || item.name || 'Movie Poster'}
-                        className="md:w-18 md:h-18 min-h-12 min-w-12 h-12 w-12 shrink-0 object-cover rounded"
+                        className="md:w-18 md:h-18 min-h-12 min-w-12 h-12 w-12 shrink-0 object-cover rounded search-image"
                     />
                     <div className="flex flex-col justify-center">
                         <p className="text-white font-medium">{item.title || item.name}</p>
