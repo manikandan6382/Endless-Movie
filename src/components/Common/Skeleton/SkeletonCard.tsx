@@ -2,11 +2,12 @@ interface SkeletonCardProps {
     index?: number;
     isTrailer?: boolean;
     isCast?: boolean;
+    isSearch?: boolean;
 }
 
-const SkeletonCard = ({ index = 0, isTrailer, isCast, }: SkeletonCardProps) => {
+const SkeletonCard = ({ index = 0, isTrailer, isCast, isSearch}: SkeletonCardProps) => {
     return (
-        <div className={`shrink-0 w-full grow ${isTrailer ? 'max-w-1/2 md:max-w-1/3 lg:max-w-1/4 2xl:max-w-1/5' : ' max-w-1/3 md:max-w-1/4 lg:max-w-1/5 xl:max-w-1/6 2xl:max-w-1/7'}`}>
+        <div className={`shrink-0 w-full grow ${isTrailer ? 'max-w-1/2 md:max-w-1/3 lg:max-w-1/4 2xl:max-w-1/5' : !isSearch ?' max-w-1/3 md:max-w-1/4 lg:max-w-1/5 xl:max-w-1/6 2xl:max-w-1/7' :''}`}>
             <div className={`flex flex-col gap-3 me-4`}>
                 <div
                     style={{ animationDelay: `${index * 500}ms` }}

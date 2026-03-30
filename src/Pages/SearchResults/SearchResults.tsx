@@ -26,7 +26,7 @@ const SearchResults = () => {
                 )}
                 {loading ? (
                     <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-4">
-                        {Array(14).fill(0).map((_, i) => <SkeletonCard key={i} index={i} />)}
+                        {Array(14).fill(0).map((_, i) => <SkeletonCard isSearch={true} key={i} index={i} />)}
                     </div>
                 ) : results.length > 0 ? (
                     <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-4">
