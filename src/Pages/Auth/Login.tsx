@@ -131,7 +131,7 @@ const Login = () => {
       {/* Header */}
       <div className="relative z-10 p-6">
         <Link to="/" className="inline-block">
-          <span className="text-netflix-red font-black text-2xl tracking-widest">ENDLESS</span>
+          <span className="text-netflix-red font-black text-3xl tracking-widest">ENDLESS</span>
         </Link>
       </div>
 
