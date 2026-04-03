@@ -50,7 +50,7 @@ const Nav = () => {
         <div className="flex lg:gap-25 md:gap-15 gap-5 text-white px-6 py-4 text-xl items-center">
           <Link to="/" className="shrink-0">
             <img
-              src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
+              src="/Netflix-logo.svg"
               alt="Netflix Logo"
               className="md:h-8 h-6"
             />

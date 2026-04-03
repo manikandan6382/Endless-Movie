@@ -75,7 +75,7 @@ const ForgotPassword = () => {
         <div className="relative z-10 p-6">
           <Link to="/" className="inline-block">
             <img
-              src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
+              src="/Netflix-logo.svg"
               alt="Netflix Logo"
               className="h-8 md:h-10"
             />
@@ -163,7 +163,7 @@ const ForgotPassword = () => {
       <div className="relative z-10 p-6">
         <Link to="/" className="inline-block">
           <img
-            src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
+            src="/Netflix-logo.svg"
             alt="Netflix Logo"
             className="h-8 md:h-10"
           />
