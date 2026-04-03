@@ -174,11 +174,7 @@ const Signup = () => {
       {/* Header */}
       <div className="relative z-10 p-6">
         <Link to="/" className="inline-block">
-          <img
-            src="/Netflix-logo.svg"
-            alt="Netflix Logo"
-            className="h-8 md:h-10"
-          />
+          <span className="text-netflix-red font-black text-2xl tracking-widest">ENDLESS</span>
         </Link>
       </div>
 

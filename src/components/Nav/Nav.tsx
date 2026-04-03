@@ -49,11 +49,7 @@ const Nav = () => {
       >
         <div className="flex lg:gap-25 md:gap-15 gap-5 text-white px-6 py-4 text-xl items-center">
           <Link to="/" className="shrink-0">
-            <img
-              src="/Netflix-logo.svg"
-              alt="Netflix Logo"
-              className="md:h-8 h-6"
-            />
+            <span className="text-netflix-red font-black text-2xl md:text-3xl tracking-widest">ENDLESS</span>
           </Link>
 
           {/* Desktop Menu */}
